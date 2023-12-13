@@ -70,7 +70,7 @@ export const NavBar = () => {
         <Link to='/' style={{ textDecoration:'none' }}>
           <Box display='flex' sx={{ alignItems:'center', gap:1}}>
             <Restaurant sx={{ fontSize:{xs:16, sm:20}, color:'white' }}/>
-            <Typography color='white' variant='h6' sx={{ display:{xs:'none', sm:'block'}}}> Recetitas</Typography>
+            <Typography color='white' variant='h6' sx={{ fontFamily:'Hedvig Letters Serif', display:{xs:'none', sm:'block'}}}> Recetitas</Typography>
           </Box>
         </Link>
 

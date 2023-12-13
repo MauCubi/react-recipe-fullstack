@@ -38,7 +38,7 @@ export const RecipeShow = () => {
           display:'flex', 
           width:'90%', 
           flexDirection:'column',
-          mt:'62px',
+          my:'62px',
           borderRadius:'10px',
           backgroundColor:'white',
           boxShadow:3,
@@ -134,18 +134,26 @@ export const RecipeShow = () => {
 
             </Box>
 
-            <Typography sx={{ color:'black', fontSize:'1.125rem' }}>{ activeRecipe?.description}</Typography>
+            <Typography sx={{ fontFamily:'Hedvig Letters Serif', color:'black', fontSize:'1.125rem' }}>{ activeRecipe?.description}</Typography>
 
             <Box className='recipe-uploader-info' component='div' sx={{ display:'flex', flexDirection:'row', mt:2}}>
-                <Typography sx={{ fontSize:'.875rem'}}>Receta subida por</Typography>
+                <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem'}}>Receta subida por</Typography>
                 <Avatar sx={{ width: 20, height: 20, mx: 1 }} src='https://images.unsplash.com/photo-1518717758536-85ae29035b6d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' />
-                <Typography sx={{ fontSize:'.875rem', fontWeight:600}}>{ activeRecipe?.user.name}</Typography>
+                <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem', fontWeight:600}}>{ activeRecipe?.user.name}</Typography>
             </Box>
 
             <Box className='recipe-bottom-info' component='div' sx={{ display:'flex', mt:'auto', flexDirection:'column' }}>
               <Box sx={{ display:'flex', color:'gray', mt:1}}>
                 <AccessTime/>
-                <Typography sx={{ ml:0.5 }}>{ activeRecipe?.cookTime.time} { activeRecipe?.cookTime.unit}</Typography>                
+                <Typography sx={{ ml:0.5 }}>
+                  { activeRecipe?.cookTime.time} { activeRecipe?.cookTime.unit},
+                </Typography>                
+                <Typography sx={{ ml:0.5 }}>
+                  { activeRecipe?.ingredients.length } Ingredientes,
+                </Typography>                
+                <Typography sx={{ ml:0.5 }}>
+                  { activeRecipe?.steps.length } Pasos
+                </Typography>                
                 {/* <Typography component='h3'>{ activeRecipe?.ingredients.length}</Typography> */}
               </Box>
             </Box>
@@ -165,9 +173,9 @@ export const RecipeShow = () => {
               activeRecipe?.ingredients.map( (ingredient, index) => (
                 
                 <Box className='ingredientList-item' component='li' key={index} sx={{ lineHeight:'2.125rem' }}>
-                  <Typography component='span'>{ (ingredient.unit !== 'A gusto')? ingredient.quantity : '' }  </Typography>
-                  <Typography component='span'>{ ingredient.unit } de</Typography>
-                  <Typography component='span' sx={{ fontWeight:600 }}> { ingredient.name }</Typography>
+                  <Typography component='span' sx={{ fontFamily:'Hedvig Letters Serif' }}>{ (ingredient.unit !== 'A gusto')? ingredient.quantity : '' }  </Typography>
+                  <Typography component='span' sx={{ fontFamily:'Hedvig Letters Serif' }}>{ ingredient.unit } de</Typography>
+                  <Typography component='span' sx={{ fontFamily:'Hedvig Letters Serif', fontWeight:600 }}> { ingredient.name }</Typography>
                 </Box>
                 
               ) )
@@ -180,11 +188,13 @@ export const RecipeShow = () => {
 
           <Typography variant='h5' sx={{ fontFamily:'serif', fontWeight:600 }}>Pasos a seguir</Typography>
 
-          {
-            activeRecipe?.steps.map( (step, index) => (
-              <Typography key={index}>{ index + 1 } { step.name }</Typography>
-            ) )
-          }
+          <ul className='stepList'>
+            {
+              activeRecipe?.steps.map( (step, index) => (
+                <Typography key={index} className='stepList-item' component='li' sx={{ fontFamily:'Hedvig Letters Serif', mb:'1rem' }} >{ step.name }</Typography>
+              ) )
+            }
+          </ul>
         </Box>
           
         </>

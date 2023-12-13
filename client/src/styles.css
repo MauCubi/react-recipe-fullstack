@@ -10,10 +10,25 @@ body {
 }
 
 .ingredientsList .ingredientList-item::before {
-  content: "\2022";  /* Add content: \2022 is the CSS Code/unicode for a bullet */
-  color: red; /* Change the color */
-  display: inline-block; /* Needed to add space between the bullet and the text */
-  width: 1em; /* Also needed for space (tweak if needed) */
-  margin-left: -1em; /* Also needed for space (tweak if needed) */
+  content: "\2022";
+  color: #b50f0f;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.stepList {
+  list-style: none; 
+  counter-reset: item;
+
+}
+
+.stepList .stepList-item::before {
+  counter-increment: item;
+  content: counter(item)'- ';
+  color: #b50f0f;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
 }
 

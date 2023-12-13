@@ -49,7 +49,7 @@ export const Login = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container>
 
-              <Typography variant='h5' >Login</Typography>
+              <Typography variant='h5'>Login</Typography>
 
               <Grid item xs={ 12 } sx={{ mt: 2}}>
 

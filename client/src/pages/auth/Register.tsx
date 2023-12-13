@@ -27,7 +27,7 @@ export const Register = () => {
   });
 
   useEffect(() => {
-    if (errorMessage !== undefined) {
+    if (errorMessage !== undefined && errorMessage !== 'Token Expiró') {
       setcredentialError(errorMessage)         
     }
   }, [errorMessage])

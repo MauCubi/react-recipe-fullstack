@@ -9,7 +9,7 @@ export const RecipeApp = () => {
   return (
     <ThemeProvider theme={ customTheme }>
         <CssBaseLine />         
-        <AppRouter />    
+        <AppRouter />         
     </ThemeProvider>
   )
 }

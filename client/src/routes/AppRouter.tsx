@@ -24,14 +24,12 @@ export const AppRouter = () => {
   }
   
 
-  return (
+  return (    
     <Routes>
-        {/* <Route path='/' element={ <Home /> } /> */}
 
         <Route path='/' element={ <Home /> } />
         <Route path='/*' element={ <Navigate to='/'/> } />       
         <Route path='/recipes/*' element={ <RecipeRoutes /> } />       
-        
 
         {
           ( status === 'not-authenticated' )
@@ -46,8 +44,6 @@ export const AppRouter = () => {
           )
         }
 
-        {/* <Route path='/recipes/*' element={ <RecipeRoutes /> } />
-        <Route path='/auth/*' element={ <AuthRoutes /> }/> */}
-    </Routes>
+    </Routes>    
   )
 }

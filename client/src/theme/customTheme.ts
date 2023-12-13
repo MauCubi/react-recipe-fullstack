@@ -3,11 +3,11 @@ import { red } from "@mui/material/colors";
 
 
 export const customTheme = createTheme({
-    typography:{
-        fontFamily: [
-            'Hedvig Letters Serif','serif'
-        ].join(','),
-    },
+    // typography:{
+    //     fontFamily: [
+    //         'Hedvig Letters Serif','serif'
+    //     ].join(','),
+    // },
     palette: {
         primary: {
             main:'#008394',

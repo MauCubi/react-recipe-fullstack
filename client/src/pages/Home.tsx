@@ -48,7 +48,7 @@ export const Home = () => {
                 
 
         {/* <Grid container item sx={{ justifyContent:'start', flexWrap:'wrap', my:2 }} columnSpacing={3} xs={10}> */}
-        <Grid container item spacing={6} xs={10}>        
+        <Grid container item spacing={6} xs={10} sx={{ minHeight:'70vh' }}>        
           {
             recipes?.map( recipe => (        
                 
@@ -89,12 +89,11 @@ export const Home = () => {
               </Grid>
              ))
           }
+        </Grid>
 
-    </Grid>
-
-    <Grid sx={{ mb:2}} mt={4}>
-      <Pagination count={10} color="primary"/>
-    </Grid>
+      <Grid sx={{ mb:2}} mt={4}>
+        <Pagination count={10} color="primary"/>
+      </Grid>
     </Grid>
     
   </>
