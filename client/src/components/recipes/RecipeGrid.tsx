@@ -47,7 +47,11 @@ export const RecipeGrid = () => {
                       <Rating readOnly value={3}/>
                       <Typography sx={{ cursor:'default', fontFamily:'sans-serif', color:'grey'}} >(5)</Typography>                
                     </Grid>
-                    <IconButton><FavoriteBorderOutlined sx={{ fontSize:'30px' }} color='error'/></IconButton>
+
+                    <IconButton>
+                      <FavoriteBorderOutlined sx={{ fontSize:'30px' }} color='error'/>
+                    </IconButton>
+
                   </CardActions>
 
                 </Card>

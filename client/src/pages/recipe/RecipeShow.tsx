@@ -8,13 +8,10 @@ import { AccessTime, FavoriteBorderOutlined } from '@mui/icons-material'
 
 export const RecipeShow = () => {
 
-  const {id, name} = useParams()
+  const {id} = useParams()
   const dispatch = useAppDispatch()
 
   const { activeRecipe, isLoadingRecipe } = useAppSelector( state => state.recipe )
-
-
-  console.log(id, name)
 
   useEffect(() => {
     dispatch( startLoadingRecipe(id as string) )

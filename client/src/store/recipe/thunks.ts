@@ -2,17 +2,19 @@
 import { AxiosError } from 'axios'
 import recipeApi from '../../api/recipeApi'
 import { AppDispatch } from '../store'
-import { onLoadRecipe, onLoadRecipes, onLoadRecipesByCategory, setCompleteSaving, setLoading, setLoadingRecipes, setSaving } from './recipeSlice'
+import { onLoadRecipe, onLoadRecipes, onLoadRecipesByCategory, setLoading, setLoadingRecipes, setSaving } from './recipeSlice'
 import { imageUpload } from '../../helpers/imageUpload'
 import { FormRecipeData } from '../../pages/recipe/RecipeCreate'
 
 
 
 
-export const startLoadingRecipes = (category?: string) => {    
 
-    return async( dispatch: AppDispatch ) => {         
-            
+export const startLoadingRecipes = (category?: string) => {    
+    
+    
+    return async( dispatch: AppDispatch ) => {        
+        
             try {        
 
                 dispatch(setLoadingRecipes(true))
@@ -74,18 +76,17 @@ export const startSavingRecipe = ( recipeData: FormRecipeData ) => {
 
         try {
             const fileUploadPromise = imageUpload( recipeData.image[0] as File )
-            const pictureUrl = await Promise.resolve( fileUploadPromise );  
+            const pictureUrl = await Promise.resolve( fileUploadPromise ); 
             
             recipeData.image = pictureUrl
 
-            const { data } = await recipeApi.post('/recipes', recipeData);
-            console.log(data)
+            const { data } = await recipeApi.post('/recipes', recipeData)
+
+            return data.receta            
             
         } catch (error) {
             console.log(error)
-        }   
-        
-        dispatch( setCompleteSaving() );
+        }     
 
     }
 

@@ -1,13 +1,13 @@
 
-import { Restaurant, AccountCircle, Menu } from '@mui/icons-material'
-import { AppBar, Toolbar, Typography, styled, Button, ButtonProps, Avatar, Box, IconButton, Divider, List, ListItem, ListItemButton, Drawer } from '@mui/material'
+import { Restaurant, AccountCircle, Menu as MenuIcon } from '@mui/icons-material'
+import { AppBar, Toolbar, Typography, styled, Button, ButtonProps, Box, IconButton, Divider, List, ListItem, ListItemButton, Drawer } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-// import LogoutIcon from '@mui/icons-material/Logout';
-import { startLogout } from '../store/auth/thunks';
+// import { startLogout } from '../store/auth/thunks';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { startLoadingCategories } from '../store/category/thunks';
+import { AccountMenu } from './ui/AccountMenu';
 
 
 
@@ -15,12 +15,11 @@ export const NavBar = () => {
 
   const navigate = useNavigate()  
 
-  const { status, user } = useAppSelector( state => state.auth )
+  const { status } = useAppSelector( state => state.auth )
   const dispatch = useAppDispatch() 
 
   const { categories } = useAppSelector( state => state.category )
 
-  
 
   const Styledbox = styled('div')({
     display: 'flex',
@@ -39,27 +38,6 @@ export const NavBar = () => {
         px:1.5,
         fontSize: 14,
         borderColor:'white',
-        ":hover":{
-          backgroundColor:'primary.light',
-          borderColor:'white'          
-        } }}       
-      
-    >
-      { props.children }
-    </Button>
-  )
-
-  const StyledButton2 = (props: ButtonProps) => (
-    <Button       
-      onClick={ () => { dispatch(startLogout()) } }
-      variant='outlined'      
-      sx={{ 
-        color:'white', 
-        textTransform:'capitalize',
-        borderRadius:1,
-        px:1,
-        fontSize: 14,
-        // borderColor:'white',
         ":hover":{
           backgroundColor:'primary.light',
           borderColor:'white'          
@@ -94,7 +72,7 @@ export const NavBar = () => {
               onClick={ handleDrawerToggle }
               sx={{ mr: 2 }}
             >
-              <Menu />
+              <MenuIcon />
             </IconButton>
             <Link to='/' style={{ textDecoration:'none' }}>
               <Box display='flex' sx={{ alignItems:'center', gap:1}}>
@@ -104,17 +82,11 @@ export const NavBar = () => {
             </Link>
           </Box>
 
-
           {
             (status === 'authenticated')
             ?            
-              <Styledbox>
-                <StyledButton2>            
-                <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.name}&backgroundColor=ffd5dc`}/>   
-                  <Typography sx={{ fontFamily:'sans-serif' }}>
-                    { user?.name } 
-                  </Typography>
-                </StyledButton2>    
+              <Styledbox>                
+                <AccountMenu />
               </Styledbox>
             :
               <Styledbox>          
@@ -123,19 +95,20 @@ export const NavBar = () => {
                   Ingresar
                 </StyledButton>    
               </Styledbox>
-          }
-          
+          }          
 
         </Toolbar>
       </AppBar>
 
 
+
+
+      {/* SideBar */}
       <Box component='nav' sx={{ width: { sm: 240 }, flexShrink: { sm:0 } }}>
         <Drawer
             variant='temporary'
             open={mobileOpen}
-            onClose={handleDrawerToggle}
-
+            onClose={handleDrawerToggle}            
             ModalProps={{
               keepMounted: true,
             }}

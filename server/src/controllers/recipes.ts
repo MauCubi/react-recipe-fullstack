@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Recipe from '../models/Recipe';
 import {Types, isValidObjectId} from 'mongoose'
 import Category from '../models/Category';
+import Favorite from '../models/Favorite';
 
 
 interface RecipeRequest extends Request {
@@ -188,5 +189,46 @@ export const deleteRecipe = async (req: RecipeRequest, res: Response) => {
         })
     }
 
+
+}
+
+export const addFavoriteRecipe = async (req: RecipeRequest, res: Response) => {
+
+    
+    try {           
+        
+        const recipe = req.params
+        const existFavorite = await Favorite.findOne({ user: req.uid, recipe: recipe.id })
+
+        if (!existFavorite) {
+
+            const favorite = new Favorite({
+                user: req.uid,
+                recipe: recipe.id
+            })
+            
+            const savedFavorite = await favorite.save();
+
+            res.json({
+                ok:true,
+                msg: `Favorito guardado ${ savedFavorite }`
+            })
+
+        } else {
+
+            const deletedFavorite = await Favorite.findByIdAndDelete(existFavorite._id)
+            res.json({
+                ok:true,
+                msg: `Favorito borrado: ${ deletedFavorite }`
+            })
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        })
+    }
 
 }

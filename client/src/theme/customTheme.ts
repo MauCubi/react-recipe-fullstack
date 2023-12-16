@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material";
 import { red } from "@mui/material/colors";
+import type {} from '@mui/lab/themeAugmentation';
 
 
 export const customTheme = createTheme({
@@ -19,7 +20,8 @@ export const customTheme = createTheme({
         },
         error: {
             main: red.A400
-        }        
+        }
+             
     },
     shape: {
         borderRadius: 10

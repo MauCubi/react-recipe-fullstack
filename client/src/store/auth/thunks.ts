@@ -4,9 +4,6 @@ import { FormAuthLoginData } from '../../pages/auth/Login';
 import recipeApi from '../../api/recipeApi';
 import { FormAuthRegisterData } from '../../pages/auth/Register';
 import { AuthAxiosError } from '../../types';
-import { onLoadCategories } from '../category/categorySlice';
-import { startLoadingCategories } from '../category/thunks';
-// import { onLoadCategories } from '../category/categorySlice';
 
 
 // export const checkingAuthentication = ( email, password ) => {       
@@ -69,7 +66,6 @@ export const checkAuthToken = () => {
 
         try {
             const { data } = await recipeApi.get('auth/renew')
-            // console.log(data.token)
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )
             dispatch( onLogin({ name: data.name, uid: data.uid }) )            
@@ -83,7 +79,6 @@ export const checkAuthToken = () => {
 export const startLogout = () => {    
 
     return async( dispatch: AppDispatch) => {
-        console.log('hola')
         localStorage.clear();
         dispatch(onLogout(undefined))
 

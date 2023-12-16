@@ -1,4 +1,4 @@
-import { Box, Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Divider, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { useEffect, useRef, useState } from 'react';
 import '@fontsource/roboto/400.css';
 import { useForm, useFieldArray } from 'react-hook-form'
@@ -9,6 +9,8 @@ import { RemoveCircleOutline, SaveOutlined } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { startSavingRecipe } from '../../store/recipe/thunks';
 import { startLoadingCategories } from '../../store/category/thunks';
+import { useNavigate } from 'react-router-dom';
+import { setCompleteSaving } from '../../store/recipe/recipeSlice';
 
 
 export type FormRecipeData = {    
@@ -21,10 +23,13 @@ export type FormRecipeData = {
     image: string | FileList
 };
 
+
+
 export const RecipeCreate = () => {
 
     const { isSaving } = useAppSelector(state => state.recipe)
     const { categories, isLoadingCategories } = useAppSelector(state => state.category)
+    const navigate = useNavigate()
     
     const form = useForm<FormRecipeData>({			
         defaultValues: {
@@ -53,9 +58,9 @@ export const RecipeCreate = () => {
         remove: removeStep, 
         append: appendStep } = useFieldArray({ control, name: "steps" });
         
-        const { fields: ingredientList,
-            remove: removeIngredient, 
-            append: appendIngredient } = useFieldArray({ control, name: "ingredients" });
+    const { fields: ingredientList,
+        remove: removeIngredient, 
+        append: appendIngredient } = useFieldArray({ control, name: "ingredients" });
     
     const { ref, ...rest } = register('image', { 
         required: { value:true, message:'Imagen necesaria'},
@@ -88,9 +93,11 @@ export const RecipeCreate = () => {
     }
 
 
-    const onSubmit = ( data: FormRecipeData ) => {    
+    const onSubmit = async ( data: FormRecipeData ) => {  
 
-        dispatch(startSavingRecipe(data))
+        const recipe = await dispatch(startSavingRecipe(data))
+        dispatch(setCompleteSaving())
+        navigate(`/recipes/${recipe._id}/${recipe.name.replace(/ /g, '-')}`)
     }  
 
 
@@ -186,16 +193,6 @@ export const RecipeCreate = () => {
                                                 <MenuItem key={category._id} value={category._id}>{ category.name }</MenuItem>
                                             ))
                                         }
-                                    {/* <MenuItem value='Entradas'>Entradas</MenuItem>
-                                    <MenuItem value='Bebidas'>Bebidas</MenuItem>
-                                    <MenuItem value='Picadas'>Picadas</MenuItem>
-                                    <MenuItem value='Plato Principal'>Plato Principal</MenuItem>
-                                    <MenuItem value='Guarnición'>Guarnición</MenuItem>
-                                    <MenuItem value='Postres'>Postres</MenuItem>
-                                    <MenuItem value='Ensaladas'>Ensaladas</MenuItem>
-                                    <MenuItem value='Reposteria'>Reposteria</MenuItem>
-                                    <MenuItem value='Salsas'>Salsas</MenuItem>
-                                    <MenuItem value='Sopas'>Sopas</MenuItem> */}
                                 </Select>                            
                         </FormControl>:''
                     }
@@ -278,6 +275,7 @@ export const RecipeCreate = () => {
                                                 <MenuItem value='Gramos' selected>Gramos</MenuItem>
                                                 <MenuItem value='Kilogramos'>Kilogramos</MenuItem>
                                                 <MenuItem value='Centilitros'>Centilitros</MenuItem>
+                                                <MenuItem value='Mililitros'>Mililitros</MenuItem>
                                                 <MenuItem value='Litros'>Litros</MenuItem>
                                                 <MenuItem value='Cucharas de cafe'>Cucharas de cafe</MenuItem>
                                                 <MenuItem value='Cucharas sopera'>Cucharas sopera</MenuItem>
@@ -366,7 +364,7 @@ export const RecipeCreate = () => {
 
                 <Box component='div' sx={{ display:'flex', mt:8, justifyContent:'end' }}>
                     <Button 
-                        startIcon={<SaveOutlined />} 
+                        startIcon={ !isSaving? <SaveOutlined /> : <CircularProgress size={20} sx={{ color:'#00000042' }} />} 
                         variant="contained" 
                         type='submit' 
                         sx={{ 
@@ -374,9 +372,11 @@ export const RecipeCreate = () => {
                         }}
                         disabled={isSaving}
                     >
-                        Guardar Receta
+                        Subir Receta                       
                     </Button>
+                    
                 </Box>
+                
             </Box>
             <DevTool control={control}/>
 
