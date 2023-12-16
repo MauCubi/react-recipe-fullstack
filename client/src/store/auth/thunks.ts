@@ -4,6 +4,9 @@ import { FormAuthLoginData } from '../../pages/auth/Login';
 import recipeApi from '../../api/recipeApi';
 import { FormAuthRegisterData } from '../../pages/auth/Register';
 import { AuthAxiosError } from '../../types';
+import { onLoadCategories } from '../category/categorySlice';
+import { startLoadingCategories } from '../category/thunks';
+// import { onLoadCategories } from '../category/categorySlice';
 
 
 // export const checkingAuthentication = ( email, password ) => {       
@@ -20,7 +23,8 @@ export const startLogin = ({ email, password }: FormAuthLoginData) => {
             const { data } = await recipeApi.post('/auth', { email, password })
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )
-            dispatch( onLogin({ name: data.name, uid: data.uid }) )
+            dispatch( onLogin({ name: data.name, uid: data.uid }) )           
+            
         } catch (error) {
             dispatch( onLogout('Credenciales incorrectas'))
             setTimeout(() => {
@@ -68,7 +72,7 @@ export const checkAuthToken = () => {
             // console.log(data.token)
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )
-            dispatch( onLogin({ name: data.name, uid: data.uid }) )
+            dispatch( onLogin({ name: data.name, uid: data.uid }) )            
         } catch (error) {
             localStorage.clear()
             dispatch( onLogout(undefined) )

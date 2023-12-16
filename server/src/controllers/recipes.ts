@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Recipe from '../models/Recipe';
 import {Types, isValidObjectId} from 'mongoose'
+import Category from '../models/Category';
 
 
 interface RecipeRequest extends Request {
@@ -14,7 +15,7 @@ export const getRecipe = async (req: RecipeRequest, res: Response) => {
     if (isValidObjectId(recipeId)) {
         
         try {
-            const recipe = await Recipe.findById(recipeId).populate('user')
+            const recipe = await Recipe.findById(recipeId).populate(['user','category'])
                     
             if (!recipe) {            
                 return res.status(404).json({
@@ -48,7 +49,26 @@ export const getRecipe = async (req: RecipeRequest, res: Response) => {
 export const getRecipes = async (req: Request, res: Response) => {
 
     // const recipes = await Recipe.find().limit(1).sort({'createdAt': 'desc'})    
-    const recipes = await Recipe.find().populate('user', ['name', 'email']) 
+    const recipes = await Recipe.find()
+        .populate('user', ['name', 'email'])
+        .populate('category', ['name'])    
+
+        return res.json({
+            ok: true,
+            recipes
+        })
+
+}
+
+export const getRecipesByCategory = async (req: Request, res: Response) => {
+
+    const category = req.params.category   
+
+    const categoryId = await Category.findOne({ name: { $regex: category, $options: 'i' } }).exec()
+
+    const recipes = await Recipe.find({ category: categoryId._id })
+        .populate('user', ['name', 'email'])
+        .populate('category', ['name'])
 
         return res.json({
             ok: true,
@@ -60,10 +80,12 @@ export const getRecipes = async (req: Request, res: Response) => {
 export const createRecipe = async (req: RecipeRequest, res: Response) => {
 
     const recipe = new Recipe(req.body);    
+    
+    
 
     try {
 
-        recipe.user = req.uid;        
+        recipe.user = req.uid;  
         const savedRecipe = await recipe.save();
 
         res.json({
@@ -88,7 +110,7 @@ export const updateRecipe = async (req: RecipeRequest, res: Response) => {
     try {
 
         const recipe = await Recipe.findById(recipeId);
-        const uid = req.uid;
+        const uid = req.uid;       
 
 
         if (!recipe) {

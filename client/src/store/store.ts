@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { authSlice } from './auth/authSlice';
 import { recipeSlice } from './recipe/recipeSlice';
+import { categorySlice } from './category/categorySlice';
 
 
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer,
-    recipe: recipeSlice.reducer
+    recipe: recipeSlice.reducer,
+    category: categorySlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false

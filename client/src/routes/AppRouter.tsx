@@ -14,12 +14,12 @@ export const AppRouter = () => {
   const { status } = useAppSelector( state => state.auth )
 
   useEffect(() => {
-    dispatch(checkAuthToken()) 
+    dispatch(checkAuthToken())
   }, [])
 
   if (status === 'checking') {
     return (
-      <h3>Cargando...</h3>
+      <h3></h3>
     )
   }
   

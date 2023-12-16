@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createRecipe, deleteRecipe, getRecipe, getRecipes, updateRecipe } from '../controllers/recipes';
+import { createRecipe, deleteRecipe, getRecipe, getRecipes, getRecipesByCategory, updateRecipe } from '../controllers/recipes';
 import { check } from 'express-validator';
 import { validateJWT } from '../middlewares/jwt-validators';
 import { fieldValidator } from '../middlewares/field-validators';
@@ -12,6 +12,7 @@ const router = Router()
 router.get('/', getRecipes)
 
 router.get('/:id', getRecipe)
+router.get('/category/:category', getRecipesByCategory)
 
 // Crear receta
 router.post('/', [

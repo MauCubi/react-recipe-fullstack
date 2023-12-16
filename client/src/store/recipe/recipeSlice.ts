@@ -10,7 +10,6 @@ export interface SliceRecipe {
     isLoadingRecipe: boolean
 }
 
-
 const initialState: SliceRecipe = {
     isLoadingRecipes: true,
     recipes: [],
@@ -26,10 +25,25 @@ export const recipeSlice = createSlice({
 
     reducers: {
         onLoadRecipes: ( state, { payload = [] } ) => {
-
-            state.isLoadingRecipes = false            
+                      
+            state.recipes = []            
             const arrayRecipe: Recipe[] = payload.recipes           
 
+            arrayRecipe.forEach( recipe => {
+                const exist = state.recipes?.find( dbrecipe => dbrecipe._id === recipe._id )
+                if (!exist) {
+                    state.recipes?.push( recipe );                    
+                }                
+            });
+            
+            state.isLoadingRecipes = false   
+
+        },
+        onLoadRecipesByCategory: ( state, { payload = [] } ) => {
+            
+            state.recipes = []            
+            const arrayRecipe: Recipe[] = payload.recipes           
+            
             arrayRecipe.forEach( recipe => {
                 const exist = state.recipes?.find( dbrecipe => dbrecipe._id === recipe._id )
                 if (!exist) {
@@ -37,6 +51,8 @@ export const recipeSlice = createSlice({
                 }       
                 
             });
+            state.isLoadingRecipes = false    
+
         },
         onLoadRecipe: ( state, { payload } ) => {            
             state.activeRecipe = payload
@@ -52,6 +68,9 @@ export const recipeSlice = createSlice({
         },
         setLoading:(state, { payload }) => {
             state.isLoadingRecipe = payload
+        },
+        setLoadingRecipes:(state, { payload }) => {
+            state.isLoadingRecipes = payload
         }
     }
 });
@@ -59,8 +78,10 @@ export const recipeSlice = createSlice({
 
 export const {
     onLoadRecipes,
+    onLoadRecipesByCategory,
     onLoadRecipe,
     setSaving,
     setCompleteSaving,
-    setLoading  
+    setLoading,
+    setLoadingRecipes  
 } = recipeSlice.actions

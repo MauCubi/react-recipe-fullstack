@@ -21,11 +21,16 @@ export interface ISteps {
     name: string,
 }
 
+export interface Category {
+    _id: string,
+    name: string,
+}
+
 export interface Recipe {
     _id: string
     name: string
     description: string
-    category: string
+    category: Category
     cookTime: ITime
     steps: ISteps[]
     ingredients: IIngredients[]   

@@ -13,6 +13,7 @@ export const RecipeShow = () => {
 
   const { activeRecipe, isLoadingRecipe } = useAppSelector( state => state.recipe )
 
+
   console.log(id, name)
 
   useEffect(() => {
@@ -73,7 +74,7 @@ export const RecipeShow = () => {
               fontFamily='sans-serif' 
               fontWeight={600}
             >
-              { activeRecipe?.category}
+              { activeRecipe?.category.name}
             </Typography>
 
             <Typography 
@@ -138,7 +139,7 @@ export const RecipeShow = () => {
 
             <Box className='recipe-uploader-info' component='div' sx={{ display:'flex', flexDirection:'row', mt:2}}>
                 <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem'}}>Receta subida por</Typography>
-                <Avatar sx={{ width: 20, height: 20, mx: 1 }} src='https://images.unsplash.com/photo-1518717758536-85ae29035b6d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' />
+                <Avatar sx={{ width: 20, height: 20, mx: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${activeRecipe?.user.name}&backgroundColor=ffd5dc`} />
                 <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem', fontWeight:600}}>{ activeRecipe?.user.name}</Typography>
             </Box>
 

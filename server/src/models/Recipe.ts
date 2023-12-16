@@ -19,7 +19,7 @@ export interface ISteps {
 export interface IRecipe {
     name: string
     description: string
-    category: string
+    category: Types.ObjectId
     cookTime: ITime
     steps: ISteps[]
     ingredients: IIngredients[]   
@@ -55,7 +55,8 @@ const RecipeSchema = new Schema<IRecipe>({
         unique: true
     },
     category: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Category',
         required: true
     },
     cookTime: {

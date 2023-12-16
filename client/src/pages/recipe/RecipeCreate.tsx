@@ -1,5 +1,5 @@
 import { Box, Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '@fontsource/roboto/400.css';
 import { useForm, useFieldArray } from 'react-hook-form'
 import { IIngredients, ITime } from '../../types';
@@ -8,25 +8,29 @@ import AddIcon from '@mui/icons-material/Add';
 import { RemoveCircleOutline, SaveOutlined } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { startSavingRecipe } from '../../store/recipe/thunks';
+import { startLoadingCategories } from '../../store/category/thunks';
 
 
 export type FormRecipeData = {    
     name: string
     description: string
-    category: string
+    category: string | null
     cookTime: ITime
     steps: { name: string }[]
     ingredients: IIngredients[]   
     image: string | FileList
-  };
+};
 
 export const RecipeCreate = () => {
 
+    const { isSaving } = useAppSelector(state => state.recipe)
+    const { categories, isLoadingCategories } = useAppSelector(state => state.category)
+    
     const form = useForm<FormRecipeData>({			
         defaultValues: {
             name: '',
             description: '',
-            category: 'Entradas',
+            category:  !isLoadingCategories? categories[0]._id : undefined ,
             cookTime: {
                 time: 1,
                 unit: 'Minutos'
@@ -35,21 +39,21 @@ export const RecipeCreate = () => {
             ingredients: [{ name: '', quantity: '', unit:'Gramos' }], 
             image: ''
         }
-    });
+    });    
 
+    const dispatch = useAppDispatch()    
+    
     const uploadClick = useRef<HTMLInputElement | null>(null)
-    const dispatch = useAppDispatch()
-    const { isSaving } = useAppSelector(state => state.recipe)
     const { handleSubmit, register, control, formState } = form
     const { errors } = formState
-
+    
     const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>('https://img.freepik.com/free-photo/camera-sign-front-side-with-white-background_187299-39792.jpg?w=740&t=st=1701702193~exp=1701702793~hmac=432d669fa8a80768dc4f1ec4b0c3993aeeae84c33fe325a17f74a1ab9091afed')
-
+    
     const { fields: stepList,
         remove: removeStep, 
         append: appendStep } = useFieldArray({ control, name: "steps" });
-
-    const { fields: ingredientList,
+        
+        const { fields: ingredientList,
             remove: removeIngredient, 
             append: appendIngredient } = useFieldArray({ control, name: "ingredients" });
     
@@ -59,7 +63,14 @@ export const RecipeCreate = () => {
     
     });
 
+    useEffect(() => {
+       dispatch( startLoadingCategories() )  
+       if (!isLoadingCategories) {
+           form.setValue('category', categories[0]._id)         
+       } 
 
+    }, [categories])
+    
 
     const onFileInputChange = ({ target }: {target: HTMLInputElement}) => {
 
@@ -79,15 +90,14 @@ export const RecipeCreate = () => {
 
     const onSubmit = ( data: FormRecipeData ) => {    
 
-        
-        // dispatch(startUploadingFiles(data.image as FileList))
         dispatch(startSavingRecipe(data))
     }  
 
 
   return (
-    <Box component='div' sx={{ display:'flex', minHeight:'100vh', backgroundColor:'#e4f0ff66', justifyContent:'center'}}>
-
+      <Box component='div' sx={{ display:'flex', minHeight:'100vh', backgroundColor:'#e4f0ff66', justifyContent:'center'}}>
+    {
+        (!isLoadingCategories)?
         <Box component='div' borderRadius='15px' sx={{ backgroundColor:'white', boxShadow:3, p:3, my:4, width:'70%', flexDirection:'row'}}>
             <Typography variant='h5' sx={{ color:'primary.light' }}>Agrega una Receta</Typography>            
             <Divider sx={{ my:2 }}/>
@@ -126,8 +136,6 @@ export const RecipeCreate = () => {
                         
                     </Box>
 
-
-
                     <Box component='div' sx={{ display:'flex', flexDirection:'column', width:'50%' }}>
                         <Box sx={{ width:'70%', height:'100%', alignSelf:'center' }}>
                             <Typography variant='h6' sx={{ fontFamily:'sans-serif'}}>Foto</Typography>                                              
@@ -165,22 +173,32 @@ export const RecipeCreate = () => {
                                         
                 <Box component='div' sx={{ width:'100%', gap:4, mt:2, display:'flex', flexDirection:'column',  justifyContent:'space-between' }}>
                             
-                    <FormControl sx={{ width:'50%'}}>    
-                            <InputLabel htmlFor='select-category'>Categoria de receta</InputLabel>                                
-                            <Select id='select-category' defaultValue='Entradas' size='small' label='Categoria de receta'
-                                {...register('category', { required: true })}>
-                                <MenuItem value='Entradas'>Entradas</MenuItem>
-                                <MenuItem value='Bebidas'>Bebidas</MenuItem>
-                                <MenuItem value='Picadas'>Picadas</MenuItem>
-                                <MenuItem value='Plato Principal'>Plato Principal</MenuItem>
-                                <MenuItem value='Guarnición'>Guarnición</MenuItem>
-                                <MenuItem value='Postres'>Postres</MenuItem>
-                                <MenuItem value='Ensaladas'>Ensaladas</MenuItem>
-                                <MenuItem value='Reposteria'>Reposteria</MenuItem>
-                                <MenuItem value='Salsas'>Salsas</MenuItem>
-                                <MenuItem value='Sopas'>Sopas</MenuItem>
-                            </Select>                            
-                    </FormControl>
+
+                    {
+                        categories?
+                        <FormControl sx={{ width:'50%'}}>    
+                                <InputLabel htmlFor='select-category'>Categoria de receta</InputLabel>                                
+                                {/* <Select id='select-category' defaultValue='Entradas' size='small' label='Categoria de receta' */}
+                                <Select id='select-category' defaultValue={ !isLoadingCategories? categories[0]._id : undefined } size='small' label='Categoria de receta'
+                                    {...register('category', { required: true })}>
+                                        {
+                                            categories?.map( category => (
+                                                <MenuItem key={category._id} value={category._id}>{ category.name }</MenuItem>
+                                            ))
+                                        }
+                                    {/* <MenuItem value='Entradas'>Entradas</MenuItem>
+                                    <MenuItem value='Bebidas'>Bebidas</MenuItem>
+                                    <MenuItem value='Picadas'>Picadas</MenuItem>
+                                    <MenuItem value='Plato Principal'>Plato Principal</MenuItem>
+                                    <MenuItem value='Guarnición'>Guarnición</MenuItem>
+                                    <MenuItem value='Postres'>Postres</MenuItem>
+                                    <MenuItem value='Ensaladas'>Ensaladas</MenuItem>
+                                    <MenuItem value='Reposteria'>Reposteria</MenuItem>
+                                    <MenuItem value='Salsas'>Salsas</MenuItem>
+                                    <MenuItem value='Sopas'>Sopas</MenuItem> */}
+                                </Select>                            
+                        </FormControl>:''
+                    }
                      
 
                     <Box component='div' sx={{ width:'50%', display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'space-between' }}> 
@@ -363,7 +381,11 @@ export const RecipeCreate = () => {
             <DevTool control={control}/>
 
 
-        </Box>       
+        </Box>
+        :
+        'Loading'       
+    }
+
 
     </Box>
   )

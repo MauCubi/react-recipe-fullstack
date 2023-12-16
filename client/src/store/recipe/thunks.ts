@@ -2,23 +2,29 @@
 import { AxiosError } from 'axios'
 import recipeApi from '../../api/recipeApi'
 import { AppDispatch } from '../store'
-import { onLoadRecipe, onLoadRecipes, setCompleteSaving, setLoading, setSaving } from './recipeSlice'
+import { onLoadRecipe, onLoadRecipes, onLoadRecipesByCategory, setCompleteSaving, setLoading, setLoadingRecipes, setSaving } from './recipeSlice'
 import { imageUpload } from '../../helpers/imageUpload'
 import { FormRecipeData } from '../../pages/recipe/RecipeCreate'
 
 
 
 
-export const startLoadingRecipes = () => {
-    
+export const startLoadingRecipes = (category?: string) => {    
 
     return async( dispatch: AppDispatch ) => {         
             
             try {        
 
-                const { data } = await recipeApi.get('/recipes')               
+                dispatch(setLoadingRecipes(true))
 
-                dispatch(onLoadRecipes(data))   
+                if (category) {                    
+                    const { data } = await recipeApi.get(`/recipes/category/${category}`)                                         
+                    dispatch(onLoadRecipesByCategory(data))                    
+                } else {
+                    const { data } = await recipeApi.get('/recipes')                    
+                    dispatch(onLoadRecipes(data)) 
+                }
+                
 
             } catch (error) {
                 console.log('Error cargando recetas')
@@ -53,33 +59,18 @@ export const startLoadingRecipe = (id: string) => {
                 } else {
                     console.log(error);
                 }
-            }
-        
+            }       
            
 
     }
 
 }
 
-// export const startUploadingFiles = ( files: FileList ) => {
-//     return async( dispatch: AppDispatch ) => {
-       
-//         const fileUploadPromise = imageUpload( files[0] )
-//         const pictureUrl = await Promise.resolve( fileUploadPromise );  
-
-//         return pictureUrl
-
-//     }
-
-// }
-
 export const startSavingRecipe = ( recipeData: FormRecipeData ) => {
 
     return async( dispatch: AppDispatch ) => {
 
         dispatch( setSaving() );
-
-        console.log(recipeData)
 
         try {
             const fileUploadPromise = imageUpload( recipeData.image[0] as File )
@@ -88,7 +79,6 @@ export const startSavingRecipe = ( recipeData: FormRecipeData ) => {
             recipeData.image = pictureUrl
 
             const { data } = await recipeApi.post('/recipes', recipeData);
-
             console.log(data)
             
         } catch (error) {
