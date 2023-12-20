@@ -5,6 +5,7 @@ import { startAddRemoveFavorite, startLoadingRecipe } from '../../store/recipe/t
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import '@fontsource/roboto/400.css';
 import { AccessTime, Favorite, FavoriteBorderOutlined } from '@mui/icons-material'
+import { RecipeReviewForm } from '../../components/recipes/RecipeReviewForm'
 
 export const RecipeShow = () => {
 
@@ -205,6 +206,42 @@ export const RecipeShow = () => {
               ) )
             }
           </ul>
+        </Box>
+
+        <Divider sx={{ my:2 }}/>
+
+        <Box className='recipe-reviews' component='div' sx={{ display:'flex', flexDirection:'column', px:16 }}>
+
+          <Box className='review-rating-box' sx={{ display:'flex', alignItems:'center', mb:2 }}>
+            <Typography variant='h5' sx={{ fontFamily:'serif', fontWeight:600 }}>Reseñas           
+              <Typography component='span' sx={{ fontFamily:'serif', ml:0.5 }}>(5)</Typography>                
+            </Typography> 
+            <Rating readOnly value={3} sx={{ ml:1.2 }}/>             
+          </Box>
+
+          <Box className='recipe-review-form' component='div' 
+            sx={{ 
+              display:'flex', 
+              flexDirection:'column', 
+              backgroundColor:'white',
+              border:0.5,
+              borderColor:'#dce2e6',
+              borderRadius:0.5,
+              width:'85%',
+              alignSelf:'center',
+              p:2,
+              boxShadow:3
+            }}
+          >
+            {/* <Typography variant='h6' sx={{ fontFamily:'sans-serif' }}>
+              Escribe una reseña
+            </Typography> */}
+            
+            <RecipeReviewForm />
+
+          </Box>
+
+          
         </Box>
           
         </>
