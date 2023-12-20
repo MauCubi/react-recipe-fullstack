@@ -2,7 +2,7 @@ import { Avatar, Button, Divider, Menu, MenuItem, Typography } from '@mui/materi
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { useState } from 'react';
 import { startLogout } from '../../store/auth/thunks';
-import { AccountCircle, Logout, PostAdd, Settings } from '@mui/icons-material';
+import { AccountCircle, KeyboardArrowDown, Logout, PostAdd, Settings } from '@mui/icons-material';
 
 
 export const AccountMenu = () => {
@@ -43,8 +43,10 @@ return (
         >            
         <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.name}&backgroundColor=ffd5dc`}/>   
             <Typography sx={{ fontFamily:'sans-serif' }}>
-            { user?.name } 
+            { user?.name }
             </Typography>
+            <KeyboardArrowDown sx={{ fontSize:18, ml:1 }}/>
+
         </Button>    
         <Menu
             id="menu-appbar"     

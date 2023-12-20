@@ -27,7 +27,7 @@ export const Login = () => {
     }
   });
 
-  const onSubmit = ( data: FormAuthLoginData ) => { 
+  const onSubmit = async ( data: FormAuthLoginData ) => { 
     setcredentialError(undefined)
     dispatch(startLogin(data))
   }

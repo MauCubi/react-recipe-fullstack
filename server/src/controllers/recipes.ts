@@ -193,7 +193,6 @@ export const deleteRecipe = async (req: RecipeRequest, res: Response) => {
 }
 
 export const addFavoriteRecipe = async (req: RecipeRequest, res: Response) => {
-
     
     try {           
         
@@ -232,3 +231,47 @@ export const addFavoriteRecipe = async (req: RecipeRequest, res: Response) => {
     }
 
 }
+
+export const getFavoritesRecipes = async (req: RecipeRequest, res: Response) => {    
+
+    try {
+        const favorites = await Favorite.find({user: req.uid}).select({ 'recipe': 1, '_id': 0 })    
+            res.json({
+                ok: true,
+                favorites
+            })        
+    } catch (error) {
+
+        res.status(400).json({
+            ok: false,
+            msg:'Error al traer favoritos'
+        })        
+    }
+    
+}
+
+export const getFullFavoritesRecipes = async (req: RecipeRequest, res: Response) => {    
+
+    try {
+        const favorites = await Favorite.find({user: req.uid}).populate({path:'recipe', populate: [ {path:'user'} ]})
+
+        const recipes = []
+        
+        favorites.map( favorite => (
+            recipes.push(favorite.recipe)
+        ))
+
+            res.json({
+                ok: true,
+                recipes
+            })        
+    } catch (error) {
+
+        res.status(400).json({
+            ok: false,
+            msg:'Error al traer favoritos'
+        })        
+    }
+    
+}
+

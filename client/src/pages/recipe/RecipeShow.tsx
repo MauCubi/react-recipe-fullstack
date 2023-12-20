@@ -1,17 +1,18 @@
 import { Avatar, Box, Button, Divider, Rating, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useEffect } from 'react'
-import { startLoadingRecipe } from '../../store/recipe/thunks'
+import { startAddRemoveFavorite, startLoadingRecipe } from '../../store/recipe/thunks'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import '@fontsource/roboto/400.css';
-import { AccessTime, FavoriteBorderOutlined } from '@mui/icons-material'
+import { AccessTime, Favorite, FavoriteBorderOutlined } from '@mui/icons-material'
 
 export const RecipeShow = () => {
 
   const {id} = useParams()
   const dispatch = useAppDispatch()
 
-  const { activeRecipe, isLoadingRecipe } = useAppSelector( state => state.recipe )
+  const { activeRecipe, isLoadingRecipe, favorites } = useAppSelector( state => state.recipe )
+  const { status } = useAppSelector( state => state.auth )
 
   useEffect(() => {
     dispatch( startLoadingRecipe(id as string) )
@@ -112,7 +113,11 @@ export const RecipeShow = () => {
                 <Divider orientation='vertical' sx={{ height:'25px', mx:2}} />
 
                 <Button 
-                  startIcon={<FavoriteBorderOutlined/>} 
+                  startIcon={
+                    (favorites?.includes(activeRecipe?._id as string))
+                    ?<Favorite/>
+                    :<FavoriteBorderOutlined/>
+                  } 
                   disableRipple
                   sx={{ 
                     p:0, 
@@ -122,6 +127,13 @@ export const RecipeShow = () => {
                     ":hover":{
                       backgroundColor:'inherit',
                       color:'error.light'
+                    }
+                  }}
+                  onClick={ () => { 
+                    if (status === 'authenticated') {
+                      dispatch(startAddRemoveFavorite(activeRecipe?._id as string))                           
+                    } else {
+                      alert('Tenes que iniciar sesion!')
                     }
                   }}
                 >

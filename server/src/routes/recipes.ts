@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { addFavoriteRecipe, createRecipe, deleteRecipe, getRecipe, getRecipes, getRecipesByCategory, updateRecipe } from '../controllers/recipes';
+import { addFavoriteRecipe, createRecipe, deleteRecipe, getFavoritesRecipes, getFullFavoritesRecipes, getRecipe, getRecipes, getRecipesByCategory, updateRecipe } from '../controllers/recipes';
 import { check } from 'express-validator';
 import { validateJWT } from '../middlewares/jwt-validators';
 import { fieldValidator } from '../middlewares/field-validators';
@@ -43,12 +43,13 @@ router.put('/:id', [
 // Borrar receta
 router.delete('/:id', validateJWT, deleteRecipe)
 
-// Crear receta
-router.post('/favorite/:id', [
-    check('recipe', 'Receta no brindada').not().isEmpty(),
-    fieldValidator,
-    validateJWT
-] , addFavoriteRecipe )
+// Agregar y quitar receta a favoritos
+router.post('/favorite/:id', validateJWT, addFavoriteRecipe )
+
+// Traer id de favoritos
+router.get('/favorites/get', validateJWT , getFavoritesRecipes )
+
+router.get('/favorites/fullget', validateJWT , getFullFavoritesRecipes )
 
 
 module.exports = router

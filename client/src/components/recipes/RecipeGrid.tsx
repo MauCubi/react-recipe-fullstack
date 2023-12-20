@@ -1,14 +1,17 @@
 import { Typography, CardMedia, Card, CardContent, CardActions, Grid, CardActionArea, IconButton, Rating } from '@mui/material';
 
-import { useAppSelector } from '../../store/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { Link } from 'react-router-dom'
-import { FavoriteBorderOutlined } from '@mui/icons-material';
+import { Favorite, FavoriteBorderOutlined } from '@mui/icons-material';
+import { startAddRemoveFavorite } from '../../store/recipe/thunks';
 
 
 export const RecipeGrid = () => {
 
 
-    const { recipes, isLoadingRecipes } = useAppSelector( state => state.recipe )
+    const { recipes, isLoadingRecipes, favorites } = useAppSelector( state => state.recipe )
+    const { status } = useAppSelector( state => state.auth )
+    const dispatch = useAppDispatch()
 
 
   return (
@@ -48,8 +51,21 @@ export const RecipeGrid = () => {
                       <Typography sx={{ cursor:'default', fontFamily:'sans-serif', color:'grey'}} >(5)</Typography>                
                     </Grid>
 
-                    <IconButton>
-                      <FavoriteBorderOutlined sx={{ fontSize:'30px' }} color='error'/>
+                    <IconButton 
+                      onClick={ () => { 
+                        if (status === 'authenticated') {
+                          dispatch(startAddRemoveFavorite(recipe._id))                           
+                        } else {
+                          alert('Tenes que iniciar sesion!')
+                        }
+                      }}
+                    >
+                      {
+                        (favorites?.includes(recipe._id))
+                        ?<Favorite sx={{ fontSize:'30px', color:'error.light' }} />
+                        :<FavoriteBorderOutlined sx={{ fontSize:'30px', color:'error.light' }} color='error'/>
+                      }
+                      {/* <FavoriteBorderOutlined sx={{ fontSize:'30px' }} color='error'/> */}
                     </IconButton>
 
                   </CardActions>

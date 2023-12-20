@@ -38,6 +38,11 @@ export interface Recipe {
     user: User
 }
 
+export interface Favorite {
+    _id: string
+    recipe: Recipe
+}
+
 
 export interface AuthAxiosError extends AxiosError {
     response: {

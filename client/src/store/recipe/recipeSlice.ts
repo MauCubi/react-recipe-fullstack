@@ -3,20 +3,22 @@ import { Recipe } from '../../types';
 
 export interface SliceRecipe {
     isLoadingRecipes: boolean,
+    isLoadingRecipe: boolean
     recipes: Recipe[] | null,
     activeRecipe: Recipe | null,
     isSaving: boolean,
     messageSaved: string,
-    isLoadingRecipe: boolean
+    favorites: string[] | null
 }
 
 const initialState: SliceRecipe = {
     isLoadingRecipes: true,
+    isLoadingRecipe: true,
     recipes: [],
     activeRecipe: null,
     isSaving: false,
     messageSaved: '',
-    isLoadingRecipe: true
+    favorites: []
   }
 
 export const recipeSlice = createSlice({
@@ -71,6 +73,24 @@ export const recipeSlice = createSlice({
         },
         setLoadingRecipes:(state, { payload }) => {
             state.isLoadingRecipes = payload
+        },
+        onLoadFavorites:( state, { payload = [] }) => {
+
+            state.favorites = []
+            const favoritesArray: { recipe: string }[] = payload.favorites
+
+            favoritesArray.map( favorite => (
+                state.favorites?.push( favorite.recipe )
+            ))
+        },
+        onAddRemoveVaforite:(state, { payload }) => {
+            
+            if (state.favorites?.includes(payload)) {
+                const index = state.favorites.indexOf(payload, 0);
+                state.favorites.splice(index, 1)
+            } else {
+                state.favorites?.push(payload)
+            }
         }
     }
 });
@@ -83,5 +103,7 @@ export const {
     setSaving,
     setCompleteSaving,
     setLoading,
-    setLoadingRecipes  
+    setLoadingRecipes,
+    onLoadFavorites,
+    onAddRemoveVaforite
 } = recipeSlice.actions

@@ -148,18 +148,31 @@ export const NavBar = () => {
 
             <Divider />
 
-            <List>
-              <ListItem disablePadding>
-                <ListItemButton sx={{ textAlign: 'center', py:0.5 }}>
-                  <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'15px', fontWeight:600 }}>Mis recetas</Typography>
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton sx={{ textAlign: 'center', py:0.5 }}>
-                  <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'15px', fontWeight:600 }}>Recetas Favoritas</Typography>
-                </ListItemButton>
-              </ListItem>
-            </List>
+            {
+              (status==='authenticated')?
+              <List>
+                <ListItem disablePadding>
+                  <ListItemButton                  
+                    component={Link} 
+                    to={`/recipes/mis-favoritos`}  
+                    sx={{ 
+                      textAlign: 'center', 
+                      py:0.5 
+                      }}
+                    onClick={ handleDrawerToggle }
+                    >
+                    <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'15px', fontWeight:600 }}>Recetas Favoritas</Typography>
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton sx={{ textAlign: 'center', py:0.5 }}>
+                    <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'15px', fontWeight:600 }}>Mis Recetas</Typography>
+                  </ListItemButton>
+                </ListItem>
+              </List>
+              :''
+            }
+
 
         </Drawer>
 

@@ -4,13 +4,13 @@ import { User } from '../../types';
 export interface SliceAuth {
     status: string,
     user: User | undefined,
-    errorMessage: string | undefined,
+    errorMessage: string | undefined
 }
 
 const initialState: SliceAuth = {
     status: 'checking',
     user: undefined,
-    errorMessage: undefined
+    errorMessage: undefined,
   }
 
 export const authSlice = createSlice({

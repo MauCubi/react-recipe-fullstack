@@ -2,15 +2,14 @@
 import { AxiosError } from 'axios'
 import recipeApi from '../../api/recipeApi'
 import { AppDispatch } from '../store'
-import { onLoadRecipe, onLoadRecipes, onLoadRecipesByCategory, setLoading, setLoadingRecipes, setSaving } from './recipeSlice'
+import { onAddRemoveVaforite, onLoadFavorites, onLoadRecipe, onLoadRecipes, setLoading, setLoadingRecipes, setSaving } from './recipeSlice'
 import { imageUpload } from '../../helpers/imageUpload'
 import { FormRecipeData } from '../../pages/recipe/RecipeCreate'
 
 
 
 
-
-export const startLoadingRecipes = (category?: string) => {    
+export const startLoadingRecipes = (category?: string) => {   
     
     
     return async( dispatch: AppDispatch ) => {        
@@ -20,8 +19,17 @@ export const startLoadingRecipes = (category?: string) => {
                 dispatch(setLoadingRecipes(true))
 
                 if (category) {                    
-                    const { data } = await recipeApi.get(`/recipes/category/${category}`)                                         
-                    dispatch(onLoadRecipesByCategory(data))                    
+                    if (category === 'mis-favoritos') {
+                        const { data } = await recipeApi.get(`/recipes/favorites/fullget`)  
+                        // const arrayRecipe: Recipe[] = []
+                        // data.favorites.map((favorite: Favorite)  => (
+                        //     arrayRecipe.push(favorite.recipe)
+                        // ))
+                        dispatch(onLoadRecipes(data))
+                    } else {
+                        const { data } = await recipeApi.get(`/recipes/category/${category}`)                                         
+                        dispatch(onLoadRecipes(data))
+                    }
                 } else {
                     const { data } = await recipeApi.get('/recipes')                    
                     dispatch(onLoadRecipes(data)) 
@@ -87,6 +95,43 @@ export const startSavingRecipe = ( recipeData: FormRecipeData ) => {
         } catch (error) {
             console.log(error)
         }     
+
+    }
+
+}
+
+
+export const startLoadingFavorites = () => {       
+    
+    return async( dispatch: AppDispatch ) => {        
+        
+            try {       
+           
+                const { data } = await recipeApi.get(`/recipes/favorites/get`)        
+                dispatch(onLoadFavorites(data))                
+
+            } catch (error) {
+                console.log('Error cargando favoritos')
+                console.log(error);
+            }
+
+    }
+
+}
+
+export const startAddRemoveFavorite = ( id: string ) => {       
+    
+    return async( dispatch: AppDispatch ) => {        
+        
+            try {       
+           
+                await recipeApi.post(`/recipes/favorite/${id}`)        
+                dispatch(onAddRemoveVaforite(id))
+
+            } catch (error) {
+                console.log('Error cargando favoritos')
+                console.log(error);
+            }
 
     }
 

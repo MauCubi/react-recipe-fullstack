@@ -4,6 +4,7 @@ import { FormAuthLoginData } from '../../pages/auth/Login';
 import recipeApi from '../../api/recipeApi';
 import { FormAuthRegisterData } from '../../pages/auth/Register';
 import { AuthAxiosError } from '../../types';
+import { startLoadingFavorites } from '../recipe/thunks';
 
 
 // export const checkingAuthentication = ( email, password ) => {       
@@ -12,6 +13,8 @@ import { AuthAxiosError } from '../../types';
 //     }
 // } 
 
+
+
 export const startLogin = ({ email, password }: FormAuthLoginData) => {    
     
     return async( dispatch: AppDispatch ) => { 
@@ -19,8 +22,9 @@ export const startLogin = ({ email, password }: FormAuthLoginData) => {
         try {
             const { data } = await recipeApi.post('/auth', { email, password })
             localStorage.setItem('token', data.token)
-            localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )
-            dispatch( onLogin({ name: data.name, uid: data.uid }) )           
+            localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )            
+            await dispatch( onLogin({ name: data.name, uid: data.uid }) )    
+            dispatch( startLoadingFavorites() )        
             
         } catch (error) {
             dispatch( onLogout('Credenciales incorrectas'))
@@ -58,6 +62,7 @@ export const startRegister = ({ name, email, password }: FormAuthRegisterData) =
 export const checkAuthToken = () => {
 
     return async( dispatch: AppDispatch ) => { 
+        
               
         const token = localStorage.getItem('token')
         if (!token) {
@@ -66,9 +71,11 @@ export const checkAuthToken = () => {
 
         try {
             const { data } = await recipeApi.get('auth/renew')
+            console.log(data.token)
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )
-            dispatch( onLogin({ name: data.name, uid: data.uid }) )            
+            await dispatch( onLogin({ name: data.name, uid: data.uid }) )    
+            dispatch( startLoadingFavorites() )        
         } catch (error) {
             localStorage.clear()
             dispatch( onLogout(undefined) )
@@ -76,11 +83,13 @@ export const checkAuthToken = () => {
     }
 }
 
-export const startLogout = () => {    
+export const startLogout = () => {        
 
-    return async( dispatch: AppDispatch) => {
-        localStorage.clear();
-        dispatch(onLogout(undefined))
+    return async( dispatch: AppDispatch) => { 
+
+        localStorage.clear()
+        dispatch(onLogout(undefined))       
+        window.location.reload()
 
     }
 
