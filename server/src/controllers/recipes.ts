@@ -275,3 +275,35 @@ export const getFullFavoritesRecipes = async (req: RecipeRequest, res: Response)
     
 }
 
+export const updateRating = async (req: RecipeRequest, res: Response) => {
+    
+    const recipeId = req.params.id;         
+    const averageFixed = Number(req.body.newAverage.toFixed(2))
+
+    try {
+
+        const recipe = await Recipe.findById(recipeId);
+
+        if (!recipe) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'Receta con ese id no existe'
+            });
+        } 
+
+        const updatedRecipe = await Recipe.findByIdAndUpdate( recipe.id, { rating: averageFixed }, { new: true } );
+
+        res.json({
+            ok: true,
+            updatedRecipe
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        })
+    }
+}

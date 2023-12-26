@@ -1,6 +1,7 @@
 import { AxiosError } from 'axios';
 
 export interface User {
+    uid: string,
     name: string,
     email: string,
     password: string
@@ -31,6 +32,7 @@ export interface Recipe {
     name: string
     description: string
     category: Category
+    rating: number
     cookTime: ITime
     steps: ISteps[]
     ingredients: IIngredients[]   
@@ -41,6 +43,26 @@ export interface Recipe {
 export interface Favorite {
     _id: string
     recipe: Recipe
+}
+
+export interface Review {
+    _id: string
+    rating: number
+    comment: string
+    recipe: Recipe | string
+    user: User
+}
+
+export interface ReviewsInfo {    
+    average: number
+    sum: number
+    num: number
+}
+
+export interface ReviewDistribution {
+    value: number,
+    quantity: number,
+    percentage: number
 }
 
 

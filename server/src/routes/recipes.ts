@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { addFavoriteRecipe, createRecipe, deleteRecipe, getFavoritesRecipes, getFullFavoritesRecipes, getRecipe, getRecipes, getRecipesByCategory, updateRecipe } from '../controllers/recipes';
+import { addFavoriteRecipe, createRecipe, deleteRecipe, getFavoritesRecipes, getFullFavoritesRecipes, getRecipe, getRecipes, getRecipesByCategory, updateRating, updateRecipe } from '../controllers/recipes';
 import { check } from 'express-validator';
 import { validateJWT } from '../middlewares/jwt-validators';
 import { fieldValidator } from '../middlewares/field-validators';
@@ -50,6 +50,8 @@ router.post('/favorite/:id', validateJWT, addFavoriteRecipe )
 router.get('/favorites/get', validateJWT , getFavoritesRecipes )
 
 router.get('/favorites/fullget', validateJWT , getFullFavoritesRecipes )
+
+router.put('/:id/setrating', validateJWT , updateRating )
 
 
 module.exports = router

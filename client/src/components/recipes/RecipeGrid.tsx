@@ -47,8 +47,13 @@ export const RecipeGrid = () => {
                   </Link>
                   <CardActions sx={{ justifyContent:'space-between', display:'flex' }}>
                     <Grid className='rating-grid' sx={{ display:'flex' }}>
-                      <Rating readOnly value={3}/>
-                      <Typography sx={{ cursor:'default', fontFamily:'sans-serif', color:'grey'}} >(5)</Typography>                
+                      {
+                        (recipe.rating !== 0)
+                        ?<Rating readOnly value={recipe.rating} precision={0.25}/>
+                        :''
+                      }
+                      {/* <Rating readOnly value={recipe.rating} precision={0.25}/> */}
+                      {/* <Typography sx={{ cursor:'default', fontFamily:'sans-serif', color:'grey'}} >{recipe.rating}</Typography>                 */}
                     </Grid>
 
                     <IconButton 

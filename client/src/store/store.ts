@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authSlice } from './auth/authSlice';
 import { recipeSlice } from './recipe/recipeSlice';
 import { categorySlice } from './category/categorySlice';
+import { reviewSlice } from './review/reviewSlice';
 
 
 export const store = configureStore({
@@ -9,6 +10,7 @@ export const store = configureStore({
     auth: authSlice.reducer,
     recipe: recipeSlice.reducer,
     category: categorySlice.reducer,
+    review: reviewSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false

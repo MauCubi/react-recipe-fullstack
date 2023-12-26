@@ -5,7 +5,14 @@ import { startAddRemoveFavorite, startLoadingRecipe } from '../../store/recipe/t
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import '@fontsource/roboto/400.css';
 import { AccessTime, Favorite, FavoriteBorderOutlined } from '@mui/icons-material'
-import { RecipeReviewForm } from '../../components/recipes/RecipeReviewForm'
+import { RecipeReviewForm } from '../../components/recipes/showPage/RecipeReviewForm'
+import { RecipeReviewList } from '../../components/recipes/showPage/RecipeReviewList'
+import { RecipeReviewTotal } from '../../components/recipes/showPage/RecipeReviewTotal'
+import { startLoadingReviews, startLoadingUserReview } from '../../store/review/thunks'
+
+
+
+
 
 export const RecipeShow = () => {
 
@@ -14,9 +21,18 @@ export const RecipeShow = () => {
 
   const { activeRecipe, isLoadingRecipe, favorites } = useAppSelector( state => state.recipe )
   const { status } = useAppSelector( state => state.auth )
+  const { reviews, reviewsInfo, reviewsStatus } = useAppSelector( state => state.review)
 
-  useEffect(() => {
+  useEffect(() => {    
+
     dispatch( startLoadingRecipe(id as string) )
+    dispatch( startLoadingReviews(id as string) )
+
+    if (status === 'authenticated') {
+      dispatch( startLoadingUserReview(id as string) )
+      console.log('reviewuser')
+    }    
+
   }, [])
   
 
@@ -47,7 +63,7 @@ export const RecipeShow = () => {
       >      
 
     {
-      (isLoadingRecipe)
+      ((isLoadingRecipe === true) && (reviewsStatus === 'loading'))
       ?
         <Typography component='h5'>Cargando</Typography>
       :
@@ -102,14 +118,21 @@ export const RecipeShow = () => {
               
               <Box className='recipe-top-review-info' component='div' sx={{ display:'flex', flexDirection:'row' }}>
 
-                <Box className='rating-box' sx={{ display:'flex' }}>
-                  <Rating readOnly value={3}/>             
-                  <Typography sx={{ color:'grey'}}>(5)</Typography>                
+                <Box className='rating-box' sx={{ display:'flex', cursor:'pointer', textDecoration:'none' }} href='#reviews' component='a'>
+                  {
+                    (activeRecipe?.rating !== 0)
+                    ?<>
+                      <Rating readOnly precision={0.5} value={ (activeRecipe?.rating === undefined) ? 0 : activeRecipe?.rating }/>             
+                      <Typography sx={{ color:'grey', textDecoration:'none'}}>({ reviewsInfo.num })</Typography>                
+                    </>
+                    : <Typography sx={{ color:'grey'}}>Sin reseñas</Typography>
+                  }
                 </Box>
 
                 <Divider orientation='vertical' sx={{ height:'25px', mx:2}} />
 
-                <Typography sx={{ color:'grey'}}>2 Comentarios</Typography>
+                <Typography sx={{ color:'grey'}}>{ reviews.filter( x => x.comment !== '' ).length } Comentarios</Typography>
+
 
                 <Divider orientation='vertical' sx={{ height:'25px', mx:2}} />
 
@@ -165,7 +188,6 @@ export const RecipeShow = () => {
                 <Typography sx={{ ml:0.5 }}>
                   { activeRecipe?.steps.length } Pasos
                 </Typography>                
-                {/* <Typography component='h3'>{ activeRecipe?.ingredients.length}</Typography> */}
               </Box>
             </Box>
 
@@ -210,39 +232,36 @@ export const RecipeShow = () => {
 
         <Divider sx={{ my:2 }}/>
 
-        <Box className='recipe-reviews' component='div' sx={{ display:'flex', flexDirection:'column', px:16 }}>
+        <Box className='recipe-reviews' id='reviews' component='div' sx={{ display:'flex', flexDirection:'column', px:16 }}>
 
           <Box className='review-rating-box' sx={{ display:'flex', alignItems:'center', mb:2 }}>
             <Typography variant='h5' sx={{ fontFamily:'serif', fontWeight:600 }}>Reseñas           
-              <Typography component='span' sx={{ fontFamily:'serif', ml:0.5 }}>(5)</Typography>                
+              {/* <Typography component='span' sx={{ fontFamily:'serif', ml:0.5 }}>(5)</Typography>                 */}
             </Typography> 
-            <Rating readOnly value={3} sx={{ ml:1.2 }}/>             
+            {/* <Rating readOnly value={3} sx={{ ml:1.2 }}/>              */}
           </Box>
 
-          <Box className='recipe-review-form' component='div' 
-            sx={{ 
-              display:'flex', 
-              flexDirection:'column', 
-              backgroundColor:'white',
-              border:0.5,
-              borderColor:'#dce2e6',
-              borderRadius:0.5,
-              width:'85%',
-              alignSelf:'center',
-              p:2,
-              boxShadow:3
-            }}
-          >
-            {/* <Typography variant='h6' sx={{ fontFamily:'sans-serif' }}>
-              Escribe una reseña
-            </Typography> */}
+            {
+              ( status == 'authenticated')
+              ?<RecipeReviewForm />
+              :''
+            }
+
+            <RecipeReviewTotal />
+
+            {
+              ((reviews.filter( x => x.comment !== '').length) !== 0)
+              ?<RecipeReviewList />
+              :''
+              
+            }
+
+
             
-            <RecipeReviewForm />
 
           </Box>
 
-          
-        </Box>
+        
           
         </>
     }     

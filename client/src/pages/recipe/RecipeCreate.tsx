@@ -95,6 +95,7 @@ export const RecipeCreate = () => {
 
     const onSubmit = async ( data: FormRecipeData ) => {  
 
+        // CHECK
         const recipe = await dispatch(startSavingRecipe(data))
         dispatch(setCompleteSaving())
         navigate(`/recipes/${recipe._id}/${recipe.name.replace(/ /g, '-')}`)

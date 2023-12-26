@@ -23,8 +23,7 @@ app.use( express.json() )
 app.use('/api/auth', require('./routes/auth'))
 app.use('/api/recipes', require('./routes/recipes'))
 app.use('/api/categories', require('./routes/categories'))
-// TODO: auth// crear,log, renew
-// TODO: Crud: Recetas
+app.use('/api/reviews', require('./routes/reviews'))
 
 
 // Escuchar peticiones
