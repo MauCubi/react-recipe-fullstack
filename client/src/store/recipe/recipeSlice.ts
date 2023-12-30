@@ -56,20 +56,22 @@ export const recipeSlice = createSlice({
             state.isLoadingRecipes = false    
 
         },
-        onLoadRecipe: ( state, { payload } ) => {            
+        onLoadRecipe: ( state, { payload } ) => {                    
             state.activeRecipe = payload
-            state.isLoadingRecipe = false
         },        
         setSaving: (state) => {
-            state.isSaving = true;
-            state.messageSaved = '';
+            state.isSaving = true
+            state.messageSaved = ''
         },
         setCompleteSaving: (state) => {
-            state.isSaving = false;
-            state.messageSaved = 'Receta Guardada';
+            state.isSaving = false
+            state.messageSaved = 'Receta Guardada'
         },
         setLoading:(state, { payload }) => {
             state.isLoadingRecipe = payload
+            if (payload === true) {
+                state.activeRecipe = null
+            }
         },
         setLoadingRecipes:(state, { payload }) => {
             state.isLoadingRecipes = payload
@@ -91,6 +93,13 @@ export const recipeSlice = createSlice({
             } else {
                 state.favorites?.push(payload)
             }
+        },
+        onUpdateReview:( state, { payload }) => {            
+            
+            if (state.activeRecipe?.rating) {
+                state.activeRecipe.rating = payload
+            }
+
         }
     }
 });
@@ -105,5 +114,6 @@ export const {
     setLoading,
     setLoadingRecipes,
     onLoadFavorites,
-    onAddRemoveVaforite
+    onAddRemoveVaforite,
+    onUpdateReview
 } = recipeSlice.actions

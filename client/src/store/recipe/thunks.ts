@@ -48,15 +48,16 @@ export const startLoadingRecipes = (category?: string) => {
 
 export const startLoadingRecipe = (id: string) => {
 
-    return async( dispatch: AppDispatch) => {    
-
+    return async( dispatch: AppDispatch) => {   
             
         dispatch(setLoading(true))      
 
             try {                        
 
                 const { data } = await recipeApi.get(`/recipes/${id}`)          
-                dispatch(onLoadRecipe(data.recipe))      
+                dispatch(onLoadRecipe(data.recipe))  
+                dispatch(setLoading(false))    
+                
 
             } catch (error) {
 

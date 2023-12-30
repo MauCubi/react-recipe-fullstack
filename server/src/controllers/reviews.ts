@@ -83,7 +83,6 @@ export const getRecipeReviews = async (req: ReviewRequest, res: Response) => {
 }
 
 export const createRecipeReview = async (req: ReviewRequest, res: Response) => {
-
     
     const review = new Review(req.body)
     
@@ -126,6 +125,30 @@ export const getRecipeUserReview = async (req: ReviewRequest, res: Response) => 
             ok:false,
             msg:'Error de traer review de usuario'
         })
+    }
+
+}
+
+export const deleteReview = async (req: ReviewRequest, res: Response) => {
+
+    const id = req.params.id
+
+    try {
+
+        const reviewDeleted = await Review.findByIdAndDelete(id)       
+
+        res.json({
+            ok: true,
+            reviewDeleted
+        })
+        
+    } catch (error) {
+
+        res.status(500).json({
+            ok: false,
+            msg: 'Error borrando la reseña'
+        })
+        
     }
 
 }

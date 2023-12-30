@@ -28,7 +28,7 @@ return (
             variant='outlined'        
             sx={{ 
                 color:'white', 
-                textTransform:'capitalize',
+                textTransform:'none',
                 backgroundColor: (Boolean(anchorEl) === true)?'primary.light':'primary',
                 borderColor:(Boolean(anchorEl) === true)?'white':'',  
                 borderRadius:1,

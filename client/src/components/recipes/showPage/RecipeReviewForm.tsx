@@ -2,7 +2,10 @@ import { DevTool } from '@hookform/devtools';
 import { Avatar, Box, Button, Divider, Rating, TextField, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { startCreatingReview } from '../../../store/review/thunks';
+import { startCreatingReview, startDeletingReview } from '../../../store/review/thunks';
+import { Delete, Edit } from '@mui/icons-material';
+import { Review } from '../../../types';
+import { useEffect } from 'react';
 
 
 export type FormReviewData = {    
@@ -17,7 +20,7 @@ export const RecipeReviewForm = () => {
     const { user } = useAppSelector(state => state.auth)
     const { activeRecipe } = useAppSelector(state => state.recipe)
     const { reviewsInfo, userReview } = useAppSelector(state => state.review)
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch()    
 
     const form = useForm<FormReviewData>({			
         defaultValues: {
@@ -27,14 +30,23 @@ export const RecipeReviewForm = () => {
         }
     })
 
-    const { handleSubmit, register, control, formState } = form
+    const { handleSubmit, register, control, formState , reset } = form
     const { errors } = formState
 
+    useEffect(() => {
+        if (formState.isSubmitSuccessful && userReview !== null) {
+            reset()
+          }
+    }, [userReview])
+
     const onSubmit = (data: FormReviewData) => {        
-        console.log(data)
         data.recipe = activeRecipe?._id as string
-        dispatch(startCreatingReview(data, reviewsInfo))
+        dispatch(startCreatingReview(data, reviewsInfo))        
     }    
+
+    const onDelete = () => {
+        dispatch(startDeletingReview(reviewsInfo, userReview as Review))
+    }
 
 
   return (
@@ -56,14 +68,48 @@ export const RecipeReviewForm = () => {
             (userReview)
             ?
             <Box component='div' display='flex' flexDirection='column'> 
+
+                <Box component='div' display='flex' justifyContent='space-between'>
+                    <Typography variant='h6' sx={{ fontFamily:'serif'}}>Tu reseña</Typography>   
+                    
+                    <Box component='div' display='flex' sx={{ gap:'1rem' }}>
+                        
+                            <Button 
+                                startIcon={<Edit />} 
+                                variant="contained" 
+                                size='small' 
+                                color="warning" 
+                                sx={{ 
+                                    textTransform:'none' 
+                                    }}
+                                >                            
+                                Editar
+                            </Button>
+
+                            <Button 
+                                startIcon={<Delete />} 
+                                variant="contained" 
+                                size='small' 
+                                color="error" 
+                                sx={{ 
+                                    textTransform:'none' 
+                                    }}
+                                onClick={ onDelete }
+                                >                            
+                                Borrar
+                            </Button>
+                        
+                    </Box>
+
+                </Box>
                 
-                <Typography variant='h6' sx={{ fontFamily:'serif'}}>Tu reseña</Typography>   
+                
                 <Divider sx={{ my:1 }}/>
                            
                         
                 <Box component='div' sx={{ display:'flex' }} >
                     <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.name}&backgroundColor=ffd5dc`}/>
-                    <Typography sx={{ textTransform:'capitalize', fontWeight:600, fontFamily:'Hedvig Letters Serif' }}>
+                    <Typography sx={{ fontWeight:600, fontFamily:'Hedvig Letters Serif' }}>
                         { user?.name }
                     </Typography>
                 </Box>
@@ -84,7 +130,7 @@ export const RecipeReviewForm = () => {
 
                     <Box component='div' sx={{ display:'flex', mb:1 }}>
                         <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.name}&backgroundColor=ffd5dc`}/>
-                        <Typography sx={{ fontFamily:'Hedvig Letters Serif', textTransform:'capitalize', fontWeight:600 }}>
+                        <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontWeight:600 }}>
                             { user?.name }
                         </Typography>
                     </Box>

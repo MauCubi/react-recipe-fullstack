@@ -5,7 +5,7 @@ export interface SliceReview {
     reviews: Review[],
     reviewsStatus: 'idle' | 'loading',
     userReview: Review | null,
-    userReviewStatus: 'idle' | 'saving' | 'editing' | 'loading',
+    userReviewStatus: 'idle' | 'saving' | 'editing' | 'loading' | 'deleting',
     reviewsInfo: ReviewsInfo
     reviewDistribution: ReviewDistribution[]
 }
@@ -53,9 +53,12 @@ export const reviewSlice = createSlice({
             state.reviewsStatus = payload
         },
         onSetUserReview: (state, { payload }) => {
-            console.log(payload.userReview)
             state.userReview = payload.userReview
             state.userReviewStatus = 'idle'
+        },
+        onDeleteUserReview: ( state ) => {
+            state.userReviewStatus = 'deleting'
+            state.userReview = null
         }
     }
 })
@@ -66,5 +69,6 @@ export const {
     onChangeUserReviewStatus,
     onLoadReviews,
     onChangeReviewsStatus,
-    onSetUserReview
+    onSetUserReview,
+    onDeleteUserReview
 } = reviewSlice.actions

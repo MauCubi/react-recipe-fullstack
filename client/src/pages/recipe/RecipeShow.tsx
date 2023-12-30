@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Divider, Rating, Typography } from '@mui/material'
+import { Avatar, Box, Button, CircularProgress, Divider, Rating, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { startAddRemoveFavorite, startLoadingRecipe } from '../../store/recipe/thunks'
@@ -14,23 +14,23 @@ import { startLoadingReviews, startLoadingUserReview } from '../../store/review/
 
 
 
+
 export const RecipeShow = () => {
 
   const {id} = useParams()
   const dispatch = useAppDispatch()
 
   const { activeRecipe, isLoadingRecipe, favorites } = useAppSelector( state => state.recipe )
-  const { status } = useAppSelector( state => state.auth )
-  const { reviews, reviewsInfo, reviewsStatus } = useAppSelector( state => state.review)
+  const { status, user } = useAppSelector( state => state.auth )
+  const { reviews, reviewsInfo } = useAppSelector( state => state.review)
 
-  useEffect(() => {    
-
+  useEffect(() => {   
+    
     dispatch( startLoadingRecipe(id as string) )
     dispatch( startLoadingReviews(id as string) )
 
     if (status === 'authenticated') {
-      dispatch( startLoadingUserReview(id as string) )
-      console.log('reviewuser')
+      dispatch( startLoadingUserReview(id as string) )      
     }    
 
   }, [])
@@ -63,9 +63,11 @@ export const RecipeShow = () => {
       >      
 
     {
-      ((isLoadingRecipe === true) && (reviewsStatus === 'loading'))
+      ((isLoadingRecipe === true) || (activeRecipe === null))
       ?
-        <Typography component='h5'>Cargando</Typography>
+      <Box component='div' sx={{ display:'flex', justifyContent:'center', alignItems:'center', minHeight:'50vh' }}>
+        <CircularProgress sx={{ fontSize:'200px' }}/>
+      </Box>
       :
         <>
         <Box className='recipe-top-section' component='div' sx={{ display:'flex' }}>
@@ -242,7 +244,7 @@ export const RecipeShow = () => {
           </Box>
 
             {
-              ( status == 'authenticated')
+              ( status === 'authenticated' && user?.name !== activeRecipe?.user.name)
               ?<RecipeReviewForm />
               :''
             }

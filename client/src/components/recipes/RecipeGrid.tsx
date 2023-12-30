@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { Link } from 'react-router-dom'
 import { Favorite, FavoriteBorderOutlined } from '@mui/icons-material';
 import { startAddRemoveFavorite } from '../../store/recipe/thunks';
+import 'animate.css';
 
 
 export const RecipeGrid = () => {
@@ -20,7 +21,7 @@ export const RecipeGrid = () => {
             (!isLoadingRecipes)?       
             recipes?.map( recipe => (        
                 
-              <Grid key={ recipe._id } item xs={4}>
+              <Grid key={ recipe._id } item xs={4} className='animate__animated animate__fadeIn' sx={{ animationDuration: '0.5s' }}>
                 <Card sx={{ width: '100%', height: 340 }}>
                   <Link to={`/recipes/${recipe._id}/${recipe.name.replace(/ /g, '-')}`} style={{ textDecoration:'none' }}>                  
                     <CardActionArea>

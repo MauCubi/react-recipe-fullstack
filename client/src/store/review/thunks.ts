@@ -1,8 +1,9 @@
 import recipeApi from '../../api/recipeApi';
 import { FormReviewData } from '../../components/recipes/showPage/RecipeReviewForm'
-import { ReviewsInfo } from '../../types';
+import { Review, ReviewsInfo } from '../../types';
+import { onUpdateReview } from '../recipe/recipeSlice';
 import { AppDispatch } from '../store'
-import { onChangeReviewsStatus, onChangeUserReviewStatus, onCreateReview, onLoadReviews, onSetUserReview } from './reviewSlice'
+import { onChangeReviewsStatus, onChangeUserReviewStatus, onCreateReview, onDeleteUserReview, onLoadReviews, onSetUserReview } from './reviewSlice'
 
 
 
@@ -24,6 +25,7 @@ export const startCreatingReview = ( reviewData: FormReviewData, reviewsInfo: Re
                 dispatch(onCreateReview(data.reviewSaved))
                 dispatch(onChangeUserReviewStatus('idle'))
                 dispatch(startLoadingReviews(reviewData.recipe))
+                dispatch(onUpdateReview(newAverage))
                 
 
             } catch (error) {
@@ -76,3 +78,32 @@ export const startLoadingUserReview = ( id: string ) => {
 
 }
 
+export const startDeletingReview = (reviewsInfo: ReviewsInfo, reviewToDelete: Review) => {       
+    
+    return async( dispatch: AppDispatch ) => {        
+        
+            try {                             
+
+                
+                const newAverage = (reviewsInfo.sum - (reviewToDelete.rating as number)) / (reviewsInfo.num - 1)  
+
+                
+                const { data } = await recipeApi.delete(`/reviews/${reviewToDelete._id}`)
+
+                await recipeApi.put(`/recipes/${reviewToDelete.recipe}/setrating`, {newAverage})
+
+                console.log(data)
+
+                dispatch(onDeleteUserReview())
+                dispatch(startLoadingReviews(reviewToDelete.recipe as string))
+                dispatch(onUpdateReview(newAverage))
+                
+
+            } catch (error) {
+                console.log('Error creando review')
+                console.log(error);
+            }
+
+    }
+
+}
