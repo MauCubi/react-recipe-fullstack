@@ -1,8 +1,24 @@
 import { Button, Divider, Grid, Pagination } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { RecipeGrid } from './RecipeGrid'
+import { useEffect, useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { startLoadingRecipes } from '../../store/recipe/thunks'
 
 export const RecipeGridWrapper = () => {
+
+  const [page, setPage] = useState<number>(1)
+
+  const dispatch = useAppDispatch()
+
+  const { pagination } = useAppSelector( state => state.recipe)
+  const { category } = useParams()
+
+  useEffect(() => {  
+    dispatch( startLoadingRecipes(category, page) )    
+  }, [page, category])
+
+
   return (
     <Grid display='flex' container justifyContent='center' alignItems='center' flexDirection='column' bgcolor='#e4f0ff66'>
 
@@ -35,7 +51,7 @@ export const RecipeGridWrapper = () => {
     </Grid>
 
     <Grid sx={{ mb:2}} mt={4}>
-      <Pagination count={10} color="primary"/>
+      <Pagination count={Math.ceil(pagination?.pageCount as number)} color="primary" page={page} onChange={ (event, pageNumber) => setPage(pageNumber)}/>
     </Grid>
 </Grid>
   )

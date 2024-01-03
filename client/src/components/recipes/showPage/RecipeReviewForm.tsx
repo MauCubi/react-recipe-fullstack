@@ -2,10 +2,12 @@ import { DevTool } from '@hookform/devtools';
 import { Avatar, Box, Button, Divider, Rating, TextField, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { startCreatingReview, startDeletingReview } from '../../../store/review/thunks';
+import { startCreatingReview, startDeletingReview, startUpdatingReview } from '../../../store/review/thunks';
 import { Delete, Edit } from '@mui/icons-material';
 import { Review } from '../../../types';
 import { useEffect } from 'react';
+import Swal from 'sweetalert2'
+import { onChangeUserReviewStatus } from '../../../store/review/reviewSlice';
 
 
 export type FormReviewData = {    
@@ -19,7 +21,7 @@ export const RecipeReviewForm = () => {
 
     const { user } = useAppSelector(state => state.auth)
     const { activeRecipe } = useAppSelector(state => state.recipe)
-    const { reviewsInfo, userReview } = useAppSelector(state => state.review)
+    const { reviewsInfo, userReview, userReviewStatus } = useAppSelector(state => state.review)
     const dispatch = useAppDispatch()    
 
     const form = useForm<FormReviewData>({			
@@ -39,13 +41,42 @@ export const RecipeReviewForm = () => {
           }
     }, [userReview])
 
+    useEffect(() => {
+        if (userReviewStatus === 'editing') {
+            form.setValue('comment', userReview?.comment as string)
+            form.setValue('rating', userReview?.rating as number)
+        }
+    }, [userReviewStatus])
+
     const onSubmit = (data: FormReviewData) => {        
-        data.recipe = activeRecipe?._id as string
-        dispatch(startCreatingReview(data, reviewsInfo))        
+        data.recipe = activeRecipe?._id as string       
+        
+        if (userReviewStatus === 'editing') {
+            dispatch(startUpdatingReview(data, reviewsInfo, userReview as Review))
+        } else {
+            dispatch(startCreatingReview(data, reviewsInfo))             
+        }
+        
     }    
 
     const onDelete = () => {
-        dispatch(startDeletingReview(reviewsInfo, userReview as Review))
+
+        Swal.fire({
+            title: "¿Realmente quieres borrar la reseña?",       
+            showConfirmButton:false,     
+            showCancelButton: true,
+            showDenyButton: true,
+            denyButtonText: 'Borrar',
+            cancelButtonText: 'Cancelar',
+            icon:'question'
+            
+          }).then((result) => {
+            if (result.isDenied) {
+                dispatch(startDeletingReview(reviewsInfo, userReview as Review))
+                Swal.fire("Reseña eliminada", "", "success");
+            }
+          });
+        
     }
 
 
@@ -65,7 +96,7 @@ export const RecipeReviewForm = () => {
         }}
     >
         {
-            (userReview)
+            (userReview && (userReviewStatus !== 'editing' ))
             ?
             <Box component='div' display='flex' flexDirection='column'> 
 
@@ -79,6 +110,7 @@ export const RecipeReviewForm = () => {
                                 variant="contained" 
                                 size='small' 
                                 color="warning" 
+                                onClick={() => dispatch(onChangeUserReviewStatus('editing'))}
                                 sx={{ 
                                     textTransform:'none' 
                                     }}
@@ -169,6 +201,7 @@ export const RecipeReviewForm = () => {
                         <Button 
                             type='submit' 
                             variant='contained' 
+                            disabled={ (userReviewStatus==='saving')? true : false }
                             sx={{ 
                                 textTransform:'none', 
                                 mt:2, 
@@ -176,7 +209,11 @@ export const RecipeReviewForm = () => {
                                 backgroundColor:'primary.light' 
                             }}
                         >
-                            Publicar
+                            {
+                                (userReviewStatus !== 'editing')
+                                ?'Publicar Reseña'
+                                :'Actualizar Reseña'
+                            }
                         </Button>
                     </Box>
 

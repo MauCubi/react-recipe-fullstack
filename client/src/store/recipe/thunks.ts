@@ -9,31 +9,28 @@ import { FormRecipeData } from '../../pages/recipe/RecipeCreate'
 
 
 
-export const startLoadingRecipes = (category?: string) => {   
+export const startLoadingRecipes = (category?: string, page?: number) => {   
     
     
-    return async( dispatch: AppDispatch ) => {        
-        
-            try {        
+    return async( dispatch: AppDispatch ) => {
 
-                dispatch(setLoadingRecipes(true))
+        try {           
+            
+            dispatch(setLoadingRecipes(true))   
 
-                if (category) {                    
-                    if (category === 'mis-favoritos') {
-                        const { data } = await recipeApi.get(`/recipes/favorites/fullget`)  
-                        // const arrayRecipe: Recipe[] = []
-                        // data.favorites.map((favorite: Favorite)  => (
-                        //     arrayRecipe.push(favorite.recipe)
-                        // ))
-                        dispatch(onLoadRecipes(data))
-                    } else {
-                        const { data } = await recipeApi.get(`/recipes/category/${category}`)                                         
-                        dispatch(onLoadRecipes(data))
-                    }
+            if (category) {                    
+                if (category === 'mis-favoritos') {
+                    const { data } = await recipeApi.get(`/recipes/favorites/fullget?page=${page}`)  
+                    dispatch(onLoadRecipes(data))
                 } else {
-                    const { data } = await recipeApi.get('/recipes')                    
-                    dispatch(onLoadRecipes(data)) 
+                    const { data } = await recipeApi.get(`/recipes/category/${category}?page=${page}`)                                         
+                    dispatch(onLoadRecipes(data))
                 }
+            } else {
+                const { data } = await recipeApi.get(`/recipes?page=${page}`)                    
+                dispatch(onLoadRecipes(data))
+
+            }
                 
 
             } catch (error) {

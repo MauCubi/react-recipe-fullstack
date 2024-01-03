@@ -132,6 +132,7 @@ export const getRecipeUserReview = async (req: ReviewRequest, res: Response) => 
 export const deleteReview = async (req: ReviewRequest, res: Response) => {
 
     const id = req.params.id
+    
 
     try {
 
@@ -147,6 +148,32 @@ export const deleteReview = async (req: ReviewRequest, res: Response) => {
         res.status(500).json({
             ok: false,
             msg: 'Error borrando la reseña'
+        })
+        
+    }
+
+}
+
+export const updateReview = async (req: ReviewRequest, res: Response) => {
+
+    const id = req.params.id    
+
+    const review = req.body
+
+    try {
+
+        const userReview = await Review.findByIdAndUpdate(id, review, { new: true })        
+
+        res.json({
+            ok: true,
+            userReview
+        })
+        
+    } catch (error) {
+
+        res.status(500).json({
+            ok: false,
+            msg: 'Error actualizando la reseña'
         })
         
     }

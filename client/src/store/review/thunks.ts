@@ -29,7 +29,7 @@ export const startCreatingReview = ( reviewData: FormReviewData, reviewsInfo: Re
                 
 
             } catch (error) {
-                console.log('Error creando review')
+                console.log('Error creando reseña')
                 console.log(error);
             }
 
@@ -82,25 +82,45 @@ export const startDeletingReview = (reviewsInfo: ReviewsInfo, reviewToDelete: Re
     
     return async( dispatch: AppDispatch ) => {        
         
-            try {                             
-
-                
-                const newAverage = (reviewsInfo.sum - (reviewToDelete.rating as number)) / (reviewsInfo.num - 1)  
-
-                
-                const { data } = await recipeApi.delete(`/reviews/${reviewToDelete._id}`)
+            try {    
+                               
+                const newAverage = (reviewsInfo.sum - (reviewToDelete.rating as number)) / (reviewsInfo.num - 1)                
+                await recipeApi.delete(`/reviews/${reviewToDelete._id}`)
 
                 await recipeApi.put(`/recipes/${reviewToDelete.recipe}/setrating`, {newAverage})
 
-                console.log(data)
-
                 dispatch(onDeleteUserReview())
                 dispatch(startLoadingReviews(reviewToDelete.recipe as string))
+                dispatch(onUpdateReview(newAverage))                
+
+            } catch (error) {
+                console.log('Error borrando reseña')
+                console.log(error);
+            }
+
+    }
+
+}
+
+export const startUpdatingReview = ( reviewData: FormReviewData, reviewsInfo: ReviewsInfo, reviewToUpdate: Review) => {       
+    
+    return async( dispatch: AppDispatch ) => {        
+        
+            try {                 
+                  
+                const { data } = await recipeApi.put(`/reviews/${reviewToUpdate._id}`, reviewData)
+
+                const newAverage = (reviewsInfo.sum - reviewToUpdate.rating + (reviewData.rating as number)) / reviewsInfo.num 
+               
+                await recipeApi.put(`/recipes/${reviewData.recipe}/setrating`, {newAverage})  
+
+                dispatch(onSetUserReview(data))
+                dispatch(startLoadingReviews(reviewData.recipe))
                 dispatch(onUpdateReview(newAverage))
                 
 
             } catch (error) {
-                console.log('Error creando review')
+                console.log('Error actualizando reseña')
                 console.log(error);
             }
 

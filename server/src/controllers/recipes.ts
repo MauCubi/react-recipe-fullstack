@@ -9,6 +9,8 @@ interface RecipeRequest extends Request {
     uid: Types.ObjectId
 }
 
+const ITEM_PER_PAGE = 3
+
 export const getRecipe = async (req: RecipeRequest, res: Response) => {
 
     const recipeId = req.params.id
@@ -50,30 +52,63 @@ export const getRecipe = async (req: RecipeRequest, res: Response) => {
 export const getRecipes = async (req: Request, res: Response) => {
 
     // const recipes = await Recipe.find().limit(1).sort({'createdAt': 'desc'})    
-    const recipes = await Recipe.find()
+
+    const page = req.query.page || 1
+    const skip = (page as number - 1) * ITEM_PER_PAGE
+
+    const countPromise = Recipe.estimatedDocumentCount()
+
+    const recipesPromise = Recipe.find()
         .populate('user', ['name', 'email'])
-        .populate('category', ['name'])    
+        .populate('category', ['name'])
+        .skip(skip)
+        .limit(ITEM_PER_PAGE)    
+
+    const [count, recipes] = await Promise.all([countPromise, recipesPromise])
+
+    const pageCount = count / ITEM_PER_PAGE
+    
+    
 
         return res.json({
             ok: true,
-            recipes
+            recipes,
+            pagination:{
+                count,
+                pageCount
+            }
         })
 
 }
 
 export const getRecipesByCategory = async (req: Request, res: Response) => {
 
-    const category = req.params.category   
+    const category = req.params.category    
 
     const categoryId = await Category.findOne({ name: { $regex: category, $options: 'i' } }).exec()
 
-    const recipes = await Recipe.find({ category: categoryId._id })
+    const page = req.query.page || 1
+    const skip = (page as number - 1) * ITEM_PER_PAGE
+    
+    const countPromise = Recipe.find({ category: categoryId._id }).countDocuments()
+
+    const recipesPromise = Recipe.find({ category: categoryId._id })
         .populate('user', ['name', 'email'])
         .populate('category', ['name'])
+        .skip(skip)
+        .limit(ITEM_PER_PAGE)    
+
+    const [count, recipes] = await Promise.all([countPromise, recipesPromise])
+
+    const pageCount = count / ITEM_PER_PAGE
 
         return res.json({
             ok: true,
-            recipes
+            recipes,
+            pagination:{
+                count,
+                pageCount
+            }
         })
 
 }

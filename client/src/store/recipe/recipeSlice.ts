@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Recipe } from '../../types';
+import { Pagination, Recipe } from '../../types';
 
 export interface SliceRecipe {
     isLoadingRecipes: boolean,
@@ -8,7 +8,8 @@ export interface SliceRecipe {
     activeRecipe: Recipe | null,
     isSaving: boolean,
     messageSaved: string,
-    favorites: string[] | null
+    favorites: string[] | null,
+    pagination: Pagination | null
 }
 
 const initialState: SliceRecipe = {
@@ -18,7 +19,8 @@ const initialState: SliceRecipe = {
     activeRecipe: null,
     isSaving: false,
     messageSaved: '',
-    favorites: []
+    favorites: [],
+    pagination: { count: 0, pageCount: 0 }
   }
 
 export const recipeSlice = createSlice({
@@ -28,8 +30,10 @@ export const recipeSlice = createSlice({
     reducers: {
         onLoadRecipes: ( state, { payload = [] } ) => {
                       
+             
             state.recipes = []            
-            const arrayRecipe: Recipe[] = payload.recipes           
+            const arrayRecipe: Recipe[] = payload.recipes    
+            state.pagination = payload.pagination     
 
             arrayRecipe.forEach( recipe => {
                 const exist = state.recipes?.find( dbrecipe => dbrecipe._id === recipe._id )

@@ -74,3 +74,8 @@ export interface AuthAxiosError extends AxiosError {
         }
     }
 }
+
+export interface Pagination {
+    count: number,
+    pageCount: number
+}

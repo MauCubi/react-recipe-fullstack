@@ -18,7 +18,7 @@ export const RecipeGrid = () => {
   return (
     <>
     {     
-            (!isLoadingRecipes)?       
+            (!isLoadingRecipes) && (recipes?.length !== 0)?       
             recipes?.map( recipe => (        
                 
               <Grid key={ recipe._id } item xs={4} className='animate__animated animate__fadeIn' sx={{ animationDuration: '0.5s' }}>
