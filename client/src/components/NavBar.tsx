@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { startLoadingCategories } from '../store/category/thunks';
 import { AccountMenu } from './ui/AccountMenu';
+import { SearchBox } from './ui/SearchBox';
 
 
 
@@ -48,19 +49,24 @@ export const NavBar = () => {
     </Button>
   )
 
+
+  
   const [mobileOpen, setMobileOpen] = useState(false);
+
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
     console.log(mobileOpen)
   };
-
-  useEffect(() => {
-    dispatch(startLoadingCategories())
-  }, [])
   
 
+  useEffect(() => {
+      
+    dispatch(startLoadingCategories())
+  }, [dispatch]) 
+
   return (
+    
     <>
       <AppBar position='sticky' sx={{ backgroundColor:'primary' }}>
         <Toolbar sx={{ display:'flex', justifyContent:'space-between' }}>
@@ -81,6 +87,8 @@ export const NavBar = () => {
               </Box>
             </Link>
           </Box>
+          
+          <SearchBox />
 
           {
             (status === 'authenticated')
@@ -133,7 +141,7 @@ export const NavBar = () => {
                       <ListItem key={ category._id } disablePadding>
                         <ListItemButton 
                           component={Link} 
-                          to={`/recipes/${category.name.toLowerCase()}`}                       
+                          to={`/recetas/categoria/${category.name.toLowerCase().replace(/ /g, '-')}`}                       
                           sx={{ 
                             textAlign: 'center', 
                             py:0.5  

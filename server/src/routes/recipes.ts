@@ -12,6 +12,7 @@ const router = Router()
 router.get('/', getRecipes)
 
 router.get('/:id', getRecipe)
+
 router.get('/category/:category', getRecipesByCategory)
 
 // Crear receta

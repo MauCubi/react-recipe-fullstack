@@ -9,27 +9,29 @@ import { FormRecipeData } from '../../pages/recipe/RecipeCreate'
 
 
 
-export const startLoadingRecipes = (category?: string, page?: number) => {   
+export const startLoadingRecipes = (category?: string, page?: number, search?:string) => {   
     
     
     return async( dispatch: AppDispatch ) => {
 
         try {           
             
-            dispatch(setLoadingRecipes(true))   
+            dispatch(setLoadingRecipes(true))            
 
             if (category) {                    
                 if (category === 'mis-favoritos') {
                     const { data } = await recipeApi.get(`/recipes/favorites/fullget?page=${page}`)  
                     dispatch(onLoadRecipes(data))
                 } else {
-                    const { data } = await recipeApi.get(`/recipes/category/${category}?page=${page}`)                                         
+                    const { data } = await recipeApi.get(`/recipes/category/${category.replace(/-/g, ' ')}?page=${page}`)                                         
                     dispatch(onLoadRecipes(data))
                 }
+            } else if(search){
+                const { data } = await recipeApi.get(`/recipes?page=${page}`)                    
+                dispatch(onLoadRecipes(data))
             } else {
                 const { data } = await recipeApi.get(`/recipes?page=${page}`)                    
                 dispatch(onLoadRecipes(data))
-
             }
                 
 

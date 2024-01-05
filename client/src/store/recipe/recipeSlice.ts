@@ -28,8 +28,7 @@ export const recipeSlice = createSlice({
     initialState,
 
     reducers: {
-        onLoadRecipes: ( state, { payload = [] } ) => {
-                      
+        onLoadRecipes: ( state, { payload = [] } ) => {                      
              
             state.recipes = []            
             const arrayRecipe: Recipe[] = payload.recipes    

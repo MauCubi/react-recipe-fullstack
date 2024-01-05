@@ -13,9 +13,10 @@ export const RecipeRoutes = () => {
       <Routes >        
 
           <Route path=':id/:name' element={ <RecipeShow /> } />
-          <Route path='create' element={ <RecipeCreate /> } />
-          <Route path=':category' element={ <RecipeIndex /> } />          
+          <Route path='agregar-receta' element={ <RecipeCreate /> } />
+          <Route path='categoria/:category' element={ <RecipeIndex /> } />          
           <Route path='/*' element={ <Navigate to='/'/> } />
+          <Route path='buscar/:search' element={ <RecipeIndex /> } />
           <Route path='/404' element={ <RecipeNotFound /> } />        
           
       </Routes>

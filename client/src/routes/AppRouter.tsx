@@ -29,7 +29,7 @@ export const AppRouter = () => {
 
         <Route path='/' element={ <Home /> } />
         <Route path='/*' element={ <Navigate to='/'/> } />       
-        <Route path='/recipes/*' element={ <RecipeRoutes /> } />       
+        <Route path='/recetas/*' element={ <RecipeRoutes /> } />       
 
         {
           ( status === 'not-authenticated' )

@@ -115,9 +115,7 @@ export const getRecipesByCategory = async (req: Request, res: Response) => {
 
 export const createRecipe = async (req: RecipeRequest, res: Response) => {
 
-    const recipe = new Recipe(req.body);    
-    
-    
+    const recipe = new Recipe(req.body);       
 
     try {
 
@@ -288,18 +286,35 @@ export const getFavoritesRecipes = async (req: RecipeRequest, res: Response) => 
 export const getFullFavoritesRecipes = async (req: RecipeRequest, res: Response) => {    
 
     try {
-        const favorites = await Favorite.find({user: req.uid}).populate({path:'recipe', populate: [ {path:'user'} ]})
-
+           
+        const page = req.query.page || 1
+        const skip = (page as number - 1) * ITEM_PER_PAGE
+        
+        const countPromise = Favorite.find({user: req.uid}).countDocuments()
+    
+        const favoritesPromise = Favorite.find({user: req.uid})
+            .populate({path:'recipe', populate: [ {path:'user'} ]})
+            .skip(skip)
+            .limit(ITEM_PER_PAGE)
+        
+        const [count, favorites] = await Promise.all([countPromise, favoritesPromise])
+        const pageCount = count / ITEM_PER_PAGE
+            
         const recipes = []
         
         favorites.map( favorite => (
             recipes.push(favorite.recipe)
         ))
 
-            res.json({
-                ok: true,
-                recipes
-            })        
+        res.json({
+            ok: true,
+            recipes,
+            pagination:{
+                count,
+                pageCount
+            }
+        })   
+
     } catch (error) {
 
         res.status(400).json({

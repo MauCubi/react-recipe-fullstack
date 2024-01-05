@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { useState } from 'react';
 import { startLogout } from '../../store/auth/thunks';
 import { AccountCircle, KeyboardArrowDown, Logout, PostAdd, Settings } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 
 export const AccountMenu = () => {
@@ -71,12 +72,15 @@ return (
                 }
             }}          
         >
-            <MenuItem onClick={handleClose}>
-                <PostAdd sx={{ fontSize:'20px', mr:1 }}/>
-                <Typography sx={{ fontSize:'14px' }}>
-                    Agregar Receta
-                </Typography>
-            </MenuItem>
+            <Link to='/recetas/agregar-receta' style={{ textDecoration:'none'}}>
+                <MenuItem onClick={handleClose}>
+                    <PostAdd sx={{fontSize:'20px', mr:1, color:'black' }}/>
+                    <Typography sx={{fontSize:'14px', color:'black'}}>
+                        Agregar Receta
+                    </Typography>
+                </MenuItem>
+            </Link>
+            
 
             <MenuItem onClick={handleClose}>
                 <AccountCircle sx={{ fontSize:'20px', mr:1 }}/>
