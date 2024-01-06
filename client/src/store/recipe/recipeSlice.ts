@@ -9,7 +9,9 @@ export interface SliceRecipe {
     isSaving: boolean,
     messageSaved: string,
     favorites: string[] | null,
-    pagination: Pagination | null
+    pagination: Pagination | null,
+    isLoadingSugestions: boolean,
+    sugestions: Recipe[] | null
 }
 
 const initialState: SliceRecipe = {
@@ -20,7 +22,9 @@ const initialState: SliceRecipe = {
     isSaving: false,
     messageSaved: '',
     favorites: [],
-    pagination: { count: 0, pageCount: 0 }
+    pagination: { count: 0, pageCount: 0 },
+    isLoadingSugestions: true,
+    sugestions: []
   }
 
 export const recipeSlice = createSlice({
@@ -102,7 +106,14 @@ export const recipeSlice = createSlice({
             if (state.activeRecipe?.rating) {
                 state.activeRecipe.rating = payload
             }
-
+        },
+        setLoadingSugestions: (state, { payload }) => {
+            state.isLoadingSugestions = payload
+        },
+        onLoadingSugestions: (state, { payload = []}) => {
+            state.sugestions = []
+            state.sugestions = payload.recipes
+            state.isLoadingSugestions = false
         }
     }
 });
@@ -116,7 +127,9 @@ export const {
     setCompleteSaving,
     setLoading,
     setLoadingRecipes,
+    setLoadingSugestions,
     onLoadFavorites,
     onAddRemoveVaforite,
-    onUpdateReview
+    onUpdateReview,
+    onLoadingSugestions
 } = recipeSlice.actions

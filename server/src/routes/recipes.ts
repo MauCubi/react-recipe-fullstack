@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { addFavoriteRecipe, createRecipe, deleteRecipe, getFavoritesRecipes, getFullFavoritesRecipes, getRecipe, getRecipes, getRecipesByCategory, updateRating, updateRecipe } from '../controllers/recipes';
+import { addFavoriteRecipe, createRecipe, deleteRecipe, getFavoritesRecipes, getFullFavoritesRecipes, getRecipe, getRecipes, getRecipesByCategory, getRecipesBySearch, getRecipesSugestion, updateRating, updateRecipe } from '../controllers/recipes';
 import { check } from 'express-validator';
 import { validateJWT } from '../middlewares/jwt-validators';
 import { fieldValidator } from '../middlewares/field-validators';
@@ -50,9 +50,15 @@ router.post('/favorite/:id', validateJWT, addFavoriteRecipe )
 // Traer id de favoritos
 router.get('/favorites/get', validateJWT , getFavoritesRecipes )
 
+// Traer los favoritos con toda la info
 router.get('/favorites/fullget', validateJWT , getFullFavoritesRecipes )
 
+// Modificar el rating de una receta
 router.put('/:id/setrating', validateJWT , updateRating )
+
+router.get('/search/:search', getRecipesBySearch)
+
+router.get('/sugestion/:search', getRecipesSugestion)
 
 
 module.exports = router

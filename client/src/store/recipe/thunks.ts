@@ -2,17 +2,16 @@
 import { AxiosError } from 'axios'
 import recipeApi from '../../api/recipeApi'
 import { AppDispatch } from '../store'
-import { onAddRemoveVaforite, onLoadFavorites, onLoadRecipe, onLoadRecipes, setLoading, setLoadingRecipes, setSaving } from './recipeSlice'
+import { onAddRemoveVaforite, onLoadFavorites, onLoadRecipe, onLoadRecipes, onLoadingSugestions, setLoading, setLoadingRecipes, setLoadingSugestions, setSaving } from './recipeSlice'
 import { imageUpload } from '../../helpers/imageUpload'
 import { FormRecipeData } from '../../pages/recipe/RecipeCreate'
 
 
 
 
-export const startLoadingRecipes = (category?: string, page?: number, search?:string) => {   
+export const startLoadingRecipes = (category?: string, page?: number, search?:string) => {     
     
-    
-    return async( dispatch: AppDispatch ) => {
+    return async( dispatch: AppDispatch ) => {        
 
         try {           
             
@@ -27,7 +26,7 @@ export const startLoadingRecipes = (category?: string, page?: number, search?:st
                     dispatch(onLoadRecipes(data))
                 }
             } else if(search){
-                const { data } = await recipeApi.get(`/recipes?page=${page}`)                    
+                const { data } = await recipeApi.get(`/recipes/search/${search}?page=${page}`)                    
                 dispatch(onLoadRecipes(data))
             } else {
                 const { data } = await recipeApi.get(`/recipes?page=${page}`)                    
@@ -37,6 +36,29 @@ export const startLoadingRecipes = (category?: string, page?: number, search?:st
 
             } catch (error) {
                 console.log('Error cargando recetas')
+                console.log(error);
+            }
+
+    }
+
+}
+
+export const startLoadingSugestions = (search?:string) => {     
+    
+    return async( dispatch: AppDispatch ) => {        
+
+        try {           
+            
+            dispatch(setLoadingSugestions(true))  
+            
+            const { data } = await recipeApi.get(`/recipes/sugestion/${search}`) 
+
+            dispatch(onLoadingSugestions(data))
+            
+            console.log(data.recipes)
+
+            } catch (error) {
+                console.log('Error cargando sugerencias')
                 console.log(error);
             }
 

@@ -113,6 +113,49 @@ export const getRecipesByCategory = async (req: Request, res: Response) => {
 
 }
 
+export const getRecipesBySearch = async (req: Request, res: Response) => {
+
+    const search = req.params.search.trim()    
+
+    const page = req.query.page || 1
+    const skip = (page as number - 1) * ITEM_PER_PAGE
+    
+    const countPromise = Recipe.find({ name: { $regex: search, $options: 'i' } }).countDocuments()
+
+    const recipesPromise = Recipe.find({ name: { $regex: search, $options: 'i' } })
+        .populate('user', ['name', 'email'])
+        .populate('category', ['name'])
+        .skip(skip)
+        .limit(ITEM_PER_PAGE)    
+
+    const [count, recipes] = await Promise.all([countPromise, recipesPromise])
+
+    const pageCount = count / ITEM_PER_PAGE
+
+        return res.json({
+            ok: true,
+            recipes,
+            pagination:{
+                count,
+                pageCount
+            }
+        })
+
+}
+
+export const getRecipesSugestion = async (req: Request, res: Response) => {
+
+    const search = req.params.search.trim()    
+
+    const recipes = await Recipe.find({ name: { $regex: search, $options: 'i' } }).limit(5)
+    
+        return res.json({
+            ok: true,
+            recipes
+        })
+
+}
+
 export const createRecipe = async (req: RecipeRequest, res: Response) => {
 
     const recipe = new Recipe(req.body);       

@@ -56,7 +56,6 @@ export const NavBar = () => {
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
-    console.log(mobileOpen)
   };
   
 
@@ -162,7 +161,7 @@ export const NavBar = () => {
                 <ListItem disablePadding>
                   <ListItemButton                  
                     component={Link} 
-                    to={`/recipes/mis-favoritos`}  
+                    to={`/recetas/categoria/mis-favoritos`}  
                     sx={{ 
                       textAlign: 'center', 
                       py:0.5 

@@ -27,7 +27,7 @@ export const RecipeIndex = () => {
         (category)
         ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>{(category.charAt(0).toUpperCase() + category.slice(1)).replace(/-/g, ' ')}</Typography>
         :(search)
-          ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Busqueda: {search.replace(/-/g, ' ')}</Typography>
+          ?<Typography></Typography>
           :<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Todas las recetas</Typography>
       }
 
