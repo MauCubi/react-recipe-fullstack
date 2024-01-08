@@ -9,9 +9,11 @@ import { FormRecipeData } from '../../pages/recipe/RecipeCreate'
 
 
 
-export const startLoadingRecipes = (category?: string, page?: number, search?:string) => {     
+export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: string, page?: number, search?:string) => {     
     
     return async( dispatch: AppDispatch ) => {        
+
+        console.log(sortBy,' ', sortOrder)
 
         try {           
             
@@ -29,7 +31,7 @@ export const startLoadingRecipes = (category?: string, page?: number, search?:st
                 const { data } = await recipeApi.get(`/recipes/search/${search}?page=${page}`)                    
                 dispatch(onLoadRecipes(data))
             } else {
-                const { data } = await recipeApi.get(`/recipes?page=${page}`)                    
+                const { data } = await recipeApi.get(`/recipes?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                    
                 dispatch(onLoadRecipes(data))
             }
                 
