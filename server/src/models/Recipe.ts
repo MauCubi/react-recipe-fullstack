@@ -26,6 +26,7 @@ export interface IRecipe {
     ingredients: IIngredients[]   
     image: string
     user: Types.ObjectId
+    createdAt: Date
 }
 
 const ingredientsSchema: Schema<IIngredients> = new Schema({

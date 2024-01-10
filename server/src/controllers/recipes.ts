@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Recipe from '../models/Recipe';
+import Recipe, { IRecipe } from '../models/Recipe';
 import {Types, isValidObjectId} from 'mongoose'
 import Category from '../models/Category';
 import Favorite from '../models/Favorite';
@@ -92,6 +92,9 @@ export const getRecipesByCategory = async (req: Request, res: Response) => {
 
     const page = req.query.page || 1
     const skip = (page as number - 1) * ITEM_PER_PAGE
+
+    const sortBy = req.query.sortBy || 'createdAt'
+    const sortOrder = req.query.sortOrder || 'asc'
     
     const countPromise = Recipe.find({ category: categoryId._id }).countDocuments()
 
@@ -99,7 +102,8 @@ export const getRecipesByCategory = async (req: Request, res: Response) => {
         .populate('user', ['name', 'email'])
         .populate('category', ['name'])
         .skip(skip)
-        .limit(ITEM_PER_PAGE)    
+        .limit(ITEM_PER_PAGE)
+        .sort({[sortBy.toString()]: (sortOrder==='asc')?1:-1})    
 
     const [count, recipes] = await Promise.all([countPromise, recipesPromise])
 
@@ -122,6 +126,9 @@ export const getRecipesBySearch = async (req: Request, res: Response) => {
 
     const page = req.query.page || 1
     const skip = (page as number - 1) * ITEM_PER_PAGE
+
+    const sortBy = req.query.sortBy || 'createdAt'
+    const sortOrder = req.query.sortOrder || 'asc'
     
     const countPromise = Recipe.find({ name: { $regex: search, $options: 'i' } }).countDocuments()
 
@@ -130,6 +137,7 @@ export const getRecipesBySearch = async (req: Request, res: Response) => {
         .populate('category', ['name'])
         .skip(skip)
         .limit(ITEM_PER_PAGE)    
+        .sort({[sortBy.toString()]: (sortOrder==='asc')?1:-1})
 
     const [count, recipes] = await Promise.all([countPromise, recipesPromise])
 
@@ -143,6 +151,7 @@ export const getRecipesBySearch = async (req: Request, res: Response) => {
                 pageCount
             }
         })
+        
 
 }
 
@@ -335,13 +344,18 @@ export const getFullFavoritesRecipes = async (req: RecipeRequest, res: Response)
            
         const page = req.query.page || 1
         const skip = (page as number - 1) * ITEM_PER_PAGE
+
+        const sortBy = req.query.sortBy || 'createdAt'
+        const sortOrder = req.query.sortOrder || 'asc'
         
         const countPromise = Favorite.find({user: req.uid}).countDocuments()
+        
     
         const favoritesPromise = Favorite.find({user: req.uid})
             .populate({path:'recipe', populate: [ {path:'user'} ]})
             .skip(skip)
             .limit(ITEM_PER_PAGE)
+            .sort({[sortBy.toString()]: (sortOrder==='asc')?1:-1})
         
         const [count, favorites] = await Promise.all([countPromise, favoritesPromise])
         const pageCount = count / ITEM_PER_PAGE
@@ -351,6 +365,24 @@ export const getFullFavoritesRecipes = async (req: RecipeRequest, res: Response)
         favorites.map( favorite => (
             recipes.push(favorite.recipe)
         ))
+
+        if (sortBy === 'createdAt') {
+            recipes.sort((a: IRecipe , b: IRecipe) => {
+                if (sortOrder === 'desc') {
+                    return b.createdAt.getTime() - a.createdAt.getTime()                    
+                } else {
+                    return a.createdAt.getTime() - b.createdAt.getTime()
+                }
+            })            
+        } else {
+            recipes.sort((a: IRecipe , b: IRecipe) => {
+                if (sortOrder === 'desc') {
+                    return b.rating - a.rating                    
+                } else {
+                    return a.rating - b.rating 
+                }
+            })          
+        }
 
         res.json({
             ok: true,

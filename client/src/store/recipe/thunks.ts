@@ -21,14 +21,14 @@ export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: 
 
             if (category) {                    
                 if (category === 'mis-favoritos') {
-                    const { data } = await recipeApi.get(`/recipes/favorites/fullget?page=${page}`)  
+                    const { data } = await recipeApi.get(`/recipes/favorites/fullget?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)  
                     dispatch(onLoadRecipes(data))
                 } else {
-                    const { data } = await recipeApi.get(`/recipes/category/${category.replace(/-/g, ' ')}?page=${page}`)                                         
+                    const { data } = await recipeApi.get(`/recipes/category/${category.replace(/-/g, ' ')}?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                                         
                     dispatch(onLoadRecipes(data))
                 }
             } else if(search){
-                const { data } = await recipeApi.get(`/recipes/search/${search}?page=${page}`)                    
+                const { data } = await recipeApi.get(`/recipes/search/${search}?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                    
                 dispatch(onLoadRecipes(data))
             } else {
                 const { data } = await recipeApi.get(`/recipes?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                    
