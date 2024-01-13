@@ -4,11 +4,12 @@ import { useEffect } from 'react'
 import { startAddRemoveFavorite, startLoadingRecipe } from '../../store/recipe/thunks'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import '@fontsource/roboto/400.css';
-import { AccessTime, Favorite, FavoriteBorderOutlined } from '@mui/icons-material'
+import { AccessTime, Delete, Edit, Favorite, FavoriteBorderOutlined } from '@mui/icons-material'
 import { RecipeReviewForm } from '../../components/recipes/showPage/RecipeReviewForm'
 import { RecipeReviewList } from '../../components/recipes/showPage/RecipeReviewList'
 import { RecipeReviewTotal } from '../../components/recipes/showPage/RecipeReviewTotal'
 import { startLoadingReviews, startLoadingUserReview } from '../../store/review/thunks'
+import { Link } from 'react-router-dom'
 
 
 
@@ -84,15 +85,34 @@ export const RecipeShow = () => {
           />
           
           <Box className='recipe-top-details' component='div' sx={{ display:'flex', flexDirection:'column', ml:'50px', height:'100%' }}>
-            <Typography 
-              className='recipe-top-category' 
-              color='#b50f0f' 
-              fontSize='1.1rem'             
-              fontFamily='sans-serif' 
-              fontWeight={600}
-            >
-              { activeRecipe?.category.name}
-            </Typography>
+            <Box display='flex' component='div' sx={{justifyContent:'space-between'}}>
+              <Typography 
+                className='recipe-top-category' 
+                color='#b50f0f' 
+                fontSize='1.1rem'             
+                fontFamily='sans-serif' 
+                fontWeight={600}
+              >
+                { activeRecipe?.category.name}
+              </Typography>
+
+              {
+                (activeRecipe.user.name === user?.name)?
+                  <Box display='flex' component='div' gap={1}>
+                    <Link to={`/recetas/editar/${activeRecipe._id}`}>
+                      <Button startIcon={<Edit />} variant="contained" color="warning" size='small'>
+                        Editar
+                      </Button>
+                    </Link>
+                    <Button startIcon={<Delete/>} variant="contained" color="error" size='small'>
+                      Borrar
+                    </Button>
+                  </Box>
+                :''
+              }
+
+
+            </Box>
 
             <Typography 
               className='recipe-top-recipename' 

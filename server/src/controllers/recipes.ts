@@ -225,7 +225,7 @@ export const updateRecipe = async (req: RecipeRequest, res: Response) => {
 
         res.json({
             ok: true,
-            recipe: updatedRecipe
+            updatedRecipe
         });
 
 

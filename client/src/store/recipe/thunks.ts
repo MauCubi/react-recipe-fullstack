@@ -4,9 +4,7 @@ import recipeApi from '../../api/recipeApi'
 import { AppDispatch } from '../store'
 import { onAddRemoveVaforite, onLoadFavorites, onLoadRecipe, onLoadRecipes, onLoadingSugestions, setLoading, setLoadingRecipes, setLoadingSugestions, setSaving } from './recipeSlice'
 import { imageUpload } from '../../helpers/imageUpload'
-import { FormRecipeData } from '../../pages/recipe/RecipeCreate'
-
-
+import { FormRecipeData } from '../../components/recipes/createUpdatePage/RecipeForm';
 
 
 export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: string, page?: number, search?:string) => {     
@@ -68,7 +66,6 @@ export const startLoadingSugestions = (search?:string) => {
 
 }
 
-
 export const startLoadingRecipe = (id: string) => {
 
     return async( dispatch: AppDispatch) => {   
@@ -115,6 +112,32 @@ export const startSavingRecipe = ( recipeData: FormRecipeData ) => {
             const { data } = await recipeApi.post('/recipes', recipeData)
 
             return data.receta            
+            
+        } catch (error) {
+            console.log(error)
+        }     
+
+    }
+
+}
+
+export const startUpdatingRecipe = ( recipeData: FormRecipeData, id: string ) => {
+
+    return async( dispatch: AppDispatch ) => {
+
+        dispatch( setSaving() );
+
+        try {
+
+            if (typeof(recipeData.image)!=='string') {
+                const fileUploadPromise = imageUpload( recipeData.image[0] as File )
+                const pictureUrl = await Promise.resolve( fileUploadPromise );                 
+                recipeData.image = pictureUrl
+            }
+
+            const { data } = await recipeApi.put(`/recipes/${id}`, recipeData)
+
+            return data.updatedRecipe
             
         } catch (error) {
             console.log(error)

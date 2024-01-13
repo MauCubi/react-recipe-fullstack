@@ -3,10 +3,11 @@ import { Pagination, Recipe } from '../../types';
 
 export interface SliceRecipe {
     isLoadingRecipes: boolean,
-    isLoadingRecipe: boolean
+    isLoadingRecipe: boolean,
     recipes: Recipe[] | null,
     activeRecipe: Recipe | null,
     isSaving: boolean,
+    isEditing: boolean,
     messageSaved: string,
     favorites: string[] | null,
     pagination: Pagination | null,
@@ -20,6 +21,7 @@ const initialState: SliceRecipe = {
     recipes: [],
     activeRecipe: null,
     isSaving: false,
+    isEditing: false,
     messageSaved: '',
     favorites: [],
     pagination: { count: 0, pageCount: 0 },
@@ -114,7 +116,10 @@ export const recipeSlice = createSlice({
             state.sugestions = []
             state.sugestions = payload.recipes
             state.isLoadingSugestions = false
-        }
+        },
+        setEditingRecipe: (state, { payload }) => {
+            state.isEditing = payload
+        },
     }
 });
 
@@ -131,5 +136,6 @@ export const {
     onLoadFavorites,
     onAddRemoveVaforite,
     onUpdateReview,
-    onLoadingSugestions
+    onLoadingSugestions,
+    setEditingRecipe
 } = recipeSlice.actions
