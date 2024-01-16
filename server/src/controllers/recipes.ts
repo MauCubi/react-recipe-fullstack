@@ -3,6 +3,7 @@ import Recipe, { IRecipe } from '../models/Recipe';
 import {Types, isValidObjectId} from 'mongoose'
 import Category from '../models/Category';
 import Favorite from '../models/Favorite';
+import Review from '../models/Review';
 
 
 interface RecipeRequest extends Request {
@@ -238,6 +239,7 @@ export const updateRecipe = async (req: RecipeRequest, res: Response) => {
     }
 }
 
+
 export const deleteRecipe = async (req: RecipeRequest, res: Response) => {
 
     const recipeId = req.params.id;
@@ -262,7 +264,10 @@ export const deleteRecipe = async (req: RecipeRequest, res: Response) => {
             });
         };
 
-        await Recipe.findByIdAndDelete( recipe.id );
+        const deleteRecipePromise = Recipe.findByIdAndDelete( recipe.id );
+        const deleteReviewsPromise = Review.deleteMany({recipe: recipe.id})
+
+        await Promise.all([deleteRecipePromise, deleteReviewsPromise])
 
         res.json({
             ok: true
@@ -276,7 +281,6 @@ export const deleteRecipe = async (req: RecipeRequest, res: Response) => {
             msg: 'Hable con el administrador'
         })
     }
-
 
 }
 

@@ -108,15 +108,15 @@ export const RecipeForm = ({recipe = null} : {recipe: Recipe | null}) => {
 
 
     const onSubmit = async ( data: FormRecipeData ) => {  
-        // CHECK
+        
         if (!recipe) {
             const newRecipe = await dispatch(startSavingRecipe(data))
             dispatch(setCompleteSaving())
-            navigate(`/recetas/${newRecipe._id}/${newRecipe.name.replace(/ /g, '-')}`)            
+            navigate(`/recetas/${newRecipe._id}/${newRecipe.name.replace(/ /g, '-')}`, { state: { from:'create' } })            
         } else {
             const updatedRecipe = await dispatch(startUpdatingRecipe(data, recipe._id))
             dispatch(setCompleteSaving())
-            navigate(`/recetas/${updatedRecipe._id}/${updatedRecipe.name.replace(/ /g, '-')}`)   
+            navigate(`/recetas/${updatedRecipe._id}/${updatedRecipe.name.replace(/ /g, '-')}`, { state: { from:'create' } })   
         }
     }  
 

@@ -2,7 +2,7 @@
 import { AxiosError } from 'axios'
 import recipeApi from '../../api/recipeApi'
 import { AppDispatch } from '../store'
-import { onAddRemoveVaforite, onLoadFavorites, onLoadRecipe, onLoadRecipes, onLoadingSugestions, setLoading, setLoadingRecipes, setLoadingSugestions, setSaving } from './recipeSlice'
+import { onAddRemoveVaforite, onDeletingRecipe, onLoadFavorites, onLoadRecipe, onLoadRecipes, onLoadingSugestions, setDeletingRecipe, setLoading, setLoadingRecipes, setLoadingSugestions, setSaving } from './recipeSlice'
 import { imageUpload } from '../../helpers/imageUpload'
 import { FormRecipeData } from '../../components/recipes/createUpdatePage/RecipeForm';
 
@@ -43,19 +43,16 @@ export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: 
 
 }
 
+
 export const startLoadingSugestions = (search?:string) => {     
     
     return async( dispatch: AppDispatch ) => {        
 
         try {           
             
-            dispatch(setLoadingSugestions(true))  
-            
+            dispatch(setLoadingSugestions(true))              
             const { data } = await recipeApi.get(`/recipes/sugestion/${search}`) 
-
-            dispatch(onLoadingSugestions(data))
-            
-            console.log(data.recipes)
+            dispatch(onLoadingSugestions(data))            
 
             } catch (error) {
                 console.log('Error cargando sugerencias')
@@ -65,6 +62,7 @@ export const startLoadingSugestions = (search?:string) => {
     }
 
 }
+
 
 export const startLoadingRecipe = (id: string) => {
 
@@ -76,8 +74,7 @@ export const startLoadingRecipe = (id: string) => {
 
                 const { data } = await recipeApi.get(`/recipes/${id}`)          
                 dispatch(onLoadRecipe(data.recipe))  
-                dispatch(setLoading(false))    
-                
+                dispatch(setLoading(false))                    
 
             } catch (error) {
 
@@ -138,6 +135,26 @@ export const startUpdatingRecipe = ( recipeData: FormRecipeData, id: string ) =>
             const { data } = await recipeApi.put(`/recipes/${id}`, recipeData)
 
             return data.updatedRecipe
+            
+        } catch (error) {
+            console.log(error)
+        }     
+
+    }
+
+}
+
+export const startDeletingRecipe = ( id: string ) => {
+    return async( dispatch: AppDispatch ) => {
+        
+
+        dispatch( setDeletingRecipe('deleting') );
+
+        try {
+            await recipeApi.delete(`/recipes/${id}`)
+            await dispatch(onDeletingRecipe())     
+            dispatch(setDeletingRecipe('idle'))
+            
             
         } catch (error) {
             console.log(error)

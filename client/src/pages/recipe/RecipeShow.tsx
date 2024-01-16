@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, CircularProgress, Divider, Rating, Typography } from '@mui/material'
-import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
-import { startAddRemoveFavorite, startLoadingRecipe } from '../../store/recipe/thunks'
+import { startAddRemoveFavorite, startDeletingRecipe, startLoadingRecipe } from '../../store/recipe/thunks'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import '@fontsource/roboto/400.css';
 import { AccessTime, Delete, Edit, Favorite, FavoriteBorderOutlined } from '@mui/icons-material'
@@ -10,6 +10,7 @@ import { RecipeReviewList } from '../../components/recipes/showPage/RecipeReview
 import { RecipeReviewTotal } from '../../components/recipes/showPage/RecipeReviewTotal'
 import { startLoadingReviews, startLoadingUserReview } from '../../store/review/thunks'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 
 
@@ -20,10 +21,25 @@ export const RecipeShow = () => {
 
   const {id} = useParams()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
 
-  const { activeRecipe, isLoadingRecipe, favorites } = useAppSelector( state => state.recipe )
+
+  const { activeRecipe, isLoadingRecipe, favorites, deletingStatus } = useAppSelector( state => state.recipe )
   const { status, user } = useAppSelector( state => state.auth )
   const { reviews, reviewsInfo } = useAppSelector( state => state.review)
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'bottom-left',
+    iconColor: 'white',
+    customClass: {
+      popup: 'colored-toast',
+    },
+    showConfirmButton: false,
+    timer: 1500,
+    timerProgressBar: true,
+  })
 
   useEffect(() => {   
     
@@ -35,6 +51,40 @@ export const RecipeShow = () => {
     }    
 
   }, [])
+
+
+  useEffect(() => {
+    if (deletingStatus==='completed') {
+      Toast.fire({
+        icon: 'success',
+        title: 'Receta Eliminada'
+      })      
+      if (location.state?.from === 'create' || navigate.length <= 0) {
+        navigate('/')
+      } else {
+        navigate(-1)
+      }
+    }
+  }, [deletingStatus, navigate])
+  
+
+  const onDeleteRecipe = () => {
+    
+    Swal.fire({
+        title: "¿Realmente quieres borrar la receta?",       
+        showConfirmButton:false,     
+        showCancelButton: true,
+        showDenyButton: true,
+        denyButtonText: 'Borrar',
+        cancelButtonText: 'Cancelar',
+        icon:'question'
+        
+      }).then((result) => {
+        if (result.isDenied) {
+            dispatch(startDeletingRecipe(activeRecipe?._id as string))                               
+        }
+      });    
+}
   
 
   return (
@@ -84,7 +134,7 @@ export const RecipeShow = () => {
             }} 
           />
           
-          <Box className='recipe-top-details' component='div' sx={{ display:'flex', flexDirection:'column', ml:'50px', height:'100%' }}>
+          <Box className='recipe-top-details' component='div' sx={{ display:'flex', flexDirection:'column', ml:'50px', height:'100%', width:'100%' }}>
             <Box display='flex' component='div' sx={{justifyContent:'space-between'}}>
               <Typography 
                 className='recipe-top-category' 
@@ -104,7 +154,7 @@ export const RecipeShow = () => {
                         Editar
                       </Button>
                     </Link>
-                    <Button startIcon={<Delete/>} variant="contained" color="error" size='small'>
+                    <Button startIcon={<Delete/>} variant="contained" color="error" size='small' onClick={ onDeleteRecipe }>
                       Borrar
                     </Button>
                   </Box>

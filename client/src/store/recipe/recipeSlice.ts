@@ -8,6 +8,7 @@ export interface SliceRecipe {
     activeRecipe: Recipe | null,
     isSaving: boolean,
     isEditing: boolean,
+    deletingStatus: 'idle' | 'deleting' | 'completed',
     messageSaved: string,
     favorites: string[] | null,
     pagination: Pagination | null,
@@ -22,6 +23,7 @@ const initialState: SliceRecipe = {
     activeRecipe: null,
     isSaving: false,
     isEditing: false,
+    deletingStatus: 'idle',
     messageSaved: '',
     favorites: [],
     pagination: { count: 0, pageCount: 0 },
@@ -120,6 +122,13 @@ export const recipeSlice = createSlice({
         setEditingRecipe: (state, { payload }) => {
             state.isEditing = payload
         },
+        setDeletingRecipe: (state, { payload }) => {
+            state.deletingStatus = payload
+        },
+        onDeletingRecipe: (state) => {
+            state.activeRecipe = null
+            state.deletingStatus = 'completed'
+        }
     }
 });
 
@@ -128,14 +137,16 @@ export const {
     onLoadRecipes,
     onLoadRecipesByCategory,
     onLoadRecipe,
+    onLoadFavorites,
+    onAddRemoveVaforite,
+    onUpdateReview,
+    onLoadingSugestions,
+    onDeletingRecipe,
     setSaving,
     setCompleteSaving,
     setLoading,
     setLoadingRecipes,
     setLoadingSugestions,
-    onLoadFavorites,
-    onAddRemoveVaforite,
-    onUpdateReview,
-    onLoadingSugestions,
-    setEditingRecipe
+    setEditingRecipe,
+    setDeletingRecipe,
 } = recipeSlice.actions
