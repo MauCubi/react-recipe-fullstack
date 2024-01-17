@@ -52,8 +52,6 @@ export const getRecipe = async (req: RecipeRequest, res: Response) => {
 
 export const getRecipes = async (req: Request, res: Response) => {
 
-    // const recipes = await Recipe.find().limit(1).sort({'createdAt': 'desc'})    
-
     const page = req.query.page || 1
     const skip = (page as number - 1) * ITEM_PER_PAGE
 
@@ -100,6 +98,38 @@ export const getRecipesByCategory = async (req: Request, res: Response) => {
     const countPromise = Recipe.find({ category: categoryId._id }).countDocuments()
 
     const recipesPromise = Recipe.find({ category: categoryId._id })
+        .populate('user', ['name', 'email'])
+        .populate('category', ['name'])
+        .skip(skip)
+        .limit(ITEM_PER_PAGE)
+        .sort({[sortBy.toString()]: (sortOrder==='asc')?1:-1})    
+
+    const [count, recipes] = await Promise.all([countPromise, recipesPromise])
+
+    const pageCount = count / ITEM_PER_PAGE
+
+        return res.json({
+            ok: true,
+            recipes,
+            pagination:{
+                count,
+                pageCount
+            }
+        })
+
+}
+
+export const getMyRecipes = async (req: RecipeRequest, res: Response) => {    
+
+    const page = req.query.page || 1
+    const skip = (page as number - 1) * ITEM_PER_PAGE
+
+    const sortBy = req.query.sortBy || 'createdAt'
+    const sortOrder = req.query.sortOrder || 'asc'
+    
+    const countPromise = Recipe.find({ user: req.uid }).countDocuments()
+
+    const recipesPromise = Recipe.find({ user: req.uid })
         .populate('user', ['name', 'email'])
         .populate('category', ['name'])
         .skip(skip)

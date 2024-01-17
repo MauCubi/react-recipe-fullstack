@@ -11,8 +11,6 @@ export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: 
     
     return async( dispatch: AppDispatch ) => {        
 
-        console.log(sortBy,' ', sortOrder)
-
         try {           
             
             dispatch(setLoadingRecipes(true))            
@@ -20,6 +18,9 @@ export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: 
             if (category) {                    
                 if (category === 'mis-favoritos') {
                     const { data } = await recipeApi.get(`/recipes/favorites/fullget?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)  
+                    dispatch(onLoadRecipes(data))
+                } else if(category === 'mis-recetas') {
+                    const { data } = await recipeApi.get(`/recipes/myrecipes/get?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                                         
                     dispatch(onLoadRecipes(data))
                 } else {
                     const { data } = await recipeApi.get(`/recipes/category/${category.replace(/-/g, ' ')}?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                                         

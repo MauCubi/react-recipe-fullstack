@@ -171,11 +171,21 @@ export const NavBar = () => {
                     <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'15px', fontWeight:600 }}>Recetas Favoritas</Typography>
                   </ListItemButton>
                 </ListItem>
+
                 <ListItem disablePadding>
-                  <ListItemButton sx={{ textAlign: 'center', py:0.5 }}>
+                  <ListItemButton 
+                    component={Link} 
+                    to={`/recetas/categoria/mis-recetas`}  
+                    sx={{ 
+                      textAlign: 'center', 
+                      py:0.5 
+                      }}
+                    onClick={ handleDrawerToggle }
+                  >
                     <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'15px', fontWeight:600 }}>Mis Recetas</Typography>
                   </ListItemButton>
                 </ListItem>
+
               </List>
               :''
             }

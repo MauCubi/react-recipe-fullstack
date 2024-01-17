@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { addFavoriteRecipe, createRecipe, deleteRecipe, getFavoritesRecipes, getFullFavoritesRecipes, getRecipe, getRecipes, getRecipesByCategory, getRecipesBySearch, getRecipesSugestion, updateRating, updateRecipe } from '../controllers/recipes';
+import { addFavoriteRecipe, createRecipe, deleteRecipe, getFavoritesRecipes, getFullFavoritesRecipes, getMyRecipes, getRecipe, getRecipes, getRecipesByCategory, getRecipesBySearch, getRecipesSugestion, updateRating, updateRecipe } from '../controllers/recipes';
 import { check } from 'express-validator';
 import { validateJWT } from '../middlewares/jwt-validators';
 import { fieldValidator } from '../middlewares/field-validators';
@@ -11,8 +11,10 @@ const router = Router()
 // Obtener recetas
 router.get('/', getRecipes)
 
+// Obtener una sola receta
 router.get('/:id', getRecipe)
 
+// Obtener recetas de una categoria
 router.get('/category/:category', getRecipesByCategory)
 
 // Crear receta
@@ -53,11 +55,16 @@ router.get('/favorites/get', validateJWT , getFavoritesRecipes )
 // Traer los favoritos con toda la info
 router.get('/favorites/fullget', validateJWT , getFullFavoritesRecipes )
 
+// Traer las recetas propias del user
+router.get('/myrecipes/get', validateJWT , getMyRecipes )
+
 // Modificar el rating de una receta
 router.put('/:id/setrating', validateJWT , updateRating )
 
+// Obtener todas las recetas que coincidan
 router.get('/search/:search', getRecipesBySearch)
 
+// Busca de sugerencias para el searchbox
 router.get('/sugestion/:search', getRecipesSugestion)
 
 
