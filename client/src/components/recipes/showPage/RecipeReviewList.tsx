@@ -23,7 +23,7 @@ export const RecipeReviewList = () => {
                     <Box component='div' display='flex' flexDirection='column' key={review._id}>                    
                         
                             <Box component='div' sx={{ display:'flex' }} >
-                                <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${review.user.name}&backgroundColor=ffd5dc`}/>
+                                <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={review.user.avatar}/>
                                 <Typography sx={{ fontWeight:600, fontFamily:'Hedvig Letters Serif' }}>
                                     { review.user.name }
                                 </Typography>

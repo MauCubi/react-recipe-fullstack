@@ -1,4 +1,4 @@
-import { clearErrorMessage, onChecking, onLogin, onLogout } from './authSlice'
+import { clearErrorMessage, onChecking, onLogin, onLogout, setAvatar } from './authSlice'
 import { AppDispatch } from '../store';
 import { FormAuthLoginData } from '../../pages/auth/Login';
 import recipeApi from '../../api/recipeApi';
@@ -23,7 +23,8 @@ export const startLogin = ({ email, password }: FormAuthLoginData) => {
             const { data } = await recipeApi.post('/auth', { email, password })
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )            
-            await dispatch( onLogin({ name: data.name, uid: data.uid }) )    
+            await dispatch( onLogin({ name: data.name, uid: data.uid }) )  
+            await dispatch( setAvatar({avatar: data.avatar}))  
             dispatch( startLoadingFavorites() )        
             
         } catch (error) {
@@ -46,6 +47,7 @@ export const startRegister = ({ name, email, password }: FormAuthRegisterData) =
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )
             dispatch( onLogin({ name: data.name, uid: data.uid }) )
+            await dispatch( setAvatar({avatar: data.avatar})) 
         } catch (error) {
             const err = error as AuthAxiosError            
             console.log(err.response?.data.msg)
@@ -71,10 +73,10 @@ export const checkAuthToken = () => {
 
         try {
             const { data } = await recipeApi.get('auth/renew')
-            console.log(data.token)
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )
             await dispatch( onLogin({ name: data.name, uid: data.uid }) )    
+            await dispatch( setAvatar({ avatar: data.avatar}))
             dispatch( startLoadingFavorites() )        
         } catch (error) {
             localStorage.clear()

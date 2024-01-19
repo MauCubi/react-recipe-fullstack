@@ -244,7 +244,7 @@ export const RecipeShow = () => {
 
             <Box className='recipe-uploader-info' component='div' sx={{ display:'flex', flexDirection:'row', mt:2}}>
                 <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem'}}>Receta subida por</Typography>
-                <Avatar sx={{ width: 20, height: 20, mx: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${activeRecipe?.user.name}&backgroundColor=ffd5dc`} />
+                <Avatar sx={{ width: 20, height: 20, mx: 1 }} src={activeRecipe.user.avatar} />
                 <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem', fontWeight:600}}>{ activeRecipe?.user.name}</Typography>
             </Box>
 

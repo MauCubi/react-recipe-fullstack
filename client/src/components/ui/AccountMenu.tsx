@@ -42,7 +42,7 @@ return (
             }} 
             
         >            
-        <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.name}&backgroundColor=ffd5dc`}/>   
+        <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={ user?.avatar }/>   
             <Typography sx={{ fontFamily:'sans-serif' }}>
             { user?.name }
             </Typography>
@@ -81,20 +81,23 @@ return (
                 </MenuItem>
             </Link>
             
+            <Link to='/usuario/agregar-receta' style={{ textDecoration:'none'}}>
+                <MenuItem onClick={handleClose}>
+                    <AccountCircle sx={{ fontSize:'20px', mr:1, color:'black'  }}/>
+                    <Typography sx={{ fontSize:'14px', color:'black' }}>
+                        Perfil
+                    </Typography>
+                </MenuItem>
+            </Link>
 
-            <MenuItem onClick={handleClose}>
-                <AccountCircle sx={{ fontSize:'20px', mr:1 }}/>
-                <Typography sx={{ fontSize:'14px' }}>
-                    Perfil
-                </Typography>
-            </MenuItem>
-
-            <MenuItem onClick={handleClose}>
-                <Settings sx={{ fontSize:'20px', mr:1 }}/>
-                <Typography sx={{ fontSize:'14px' }}>
-                    Configuración de Usuario
-                </Typography>
-            </MenuItem>
+            <Link to='/configuracion' style={{ textDecoration:'none'}}>
+                <MenuItem onClick={handleClose}>
+                    <Settings sx={{ fontSize:'20px', mr:1, color:'black'  }}/>
+                    <Typography sx={{ fontSize:'14px', color:'black' }}>
+                        Configuración de Usuario
+                    </Typography>
+                </MenuItem>
+            </Link>
 
             <Divider />
 

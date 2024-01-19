@@ -52,6 +52,7 @@ export const createUser = async (req: Request, res: Response) => {
             ok: true,
             uid: user.id,
             name: user.name,
+            avatar: user.avatar,
             token
         })          
         
@@ -73,9 +74,6 @@ export const loginUser = async (req: Request, res: Response) => {
     try {
 
         const user = await User.findOne({ email: email })
-
-        // let count = await User.countDocuments({ name: { $not: { $eq: user.name } }  })
-        // console.log(count)
 
         if (!user) {
             return res.status(400).json({
@@ -102,6 +100,7 @@ export const loginUser = async (req: Request, res: Response) => {
             ok: true,
             uid: user.id,
             name: user.name,
+            avatar: user.avatar,
             token
         })
         
@@ -117,15 +116,19 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const renewToken = async (req: IUserRequest, res: Response) => {
 
+    console.log(req)
+
     const uid = req.uid
     const name = req.name
+    const user = await User.findById(uid)
+    const avatar = user.avatar
 
     // Generar JWT
     const token = await generateJWT( uid, name )
 
     res.json({
         ok:true,
-        uid, name,
+        uid, name, avatar,
         token
     })
 

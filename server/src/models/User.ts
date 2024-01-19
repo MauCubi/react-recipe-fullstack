@@ -4,6 +4,7 @@ export interface IUser {
     name: string;
     email: string;
     password: string;    
+    avatar: string;
   }
 
 const UserSchema = new Schema<IUser>({
@@ -20,6 +21,10 @@ const UserSchema = new Schema<IUser>({
     password: {
         type: String,
         required: true
+    },
+    avatar: {
+        type: String,
+        default: 'https://res.cloudinary.com/dcavctpft/image/upload/v1705686648/recipes/capybara-3247363_1280_w7aslo.jpg'
     }
 })
 

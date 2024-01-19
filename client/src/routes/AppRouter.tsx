@@ -6,6 +6,7 @@ import { checkAuthToken } from '../store/auth/thunks';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { useEffect } from 'react';
 import { RecipeRoutes } from './recipe/RecipeRoutes';
+import { UserSettings } from '../pages/user/UserSettings';
 
 
 export const AppRouter = () => {  
@@ -30,6 +31,7 @@ export const AppRouter = () => {
         <Route path='/' element={ <Home /> } />
         <Route path='/*' element={ <Navigate to='/'/> } />       
         <Route path='/recetas/*' element={ <RecipeRoutes /> } />       
+             
 
         {
           ( status === 'not-authenticated' )
@@ -40,6 +42,7 @@ export const AppRouter = () => {
           ):(
             <>
               <Route path='/auth/*' element={ <Navigate to='/'/> }/>
+              <Route path='/configuracion' element={ <UserSettings /> } />  
             </>
           )
         }

@@ -35,6 +35,11 @@ export const authSlice = createSlice({
         },
         clearErrorMessage: ( state ) => {
             state.errorMessage = undefined
+        },
+        setAvatar: (state, { payload }) => {
+            if (state.user !== undefined) {
+                state.user.avatar = payload.avatar                
+            }
         }
     }
 });
@@ -44,5 +49,6 @@ export const {
     onChecking,
     onLogin,
     onLogout,
-    clearErrorMessage
+    clearErrorMessage,
+    setAvatar
  } = authSlice.actions;

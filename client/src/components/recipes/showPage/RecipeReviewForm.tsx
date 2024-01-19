@@ -140,7 +140,7 @@ export const RecipeReviewForm = () => {
                            
                         
                 <Box component='div' sx={{ display:'flex' }} >
-                    <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.name}&backgroundColor=ffd5dc`}/>
+                    <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={user?.avatar}/>
                     <Typography sx={{ fontWeight:600, fontFamily:'Hedvig Letters Serif' }}>
                         { user?.name }
                     </Typography>
@@ -161,7 +161,7 @@ export const RecipeReviewForm = () => {
                 <Box component='form' onSubmit={ handleSubmit(onSubmit) } sx={{ display:'flex',flexDirection:'column' }}>
 
                     <Box component='div' sx={{ display:'flex', mb:1 }}>
-                        <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user?.name}&backgroundColor=ffd5dc`}/>
+                        <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={user?.avatar}/>
                         <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontWeight:600 }}>
                             { user?.name }
                         </Typography>
