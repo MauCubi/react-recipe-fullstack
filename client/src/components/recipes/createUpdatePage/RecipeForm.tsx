@@ -128,7 +128,7 @@ export const RecipeForm = ({recipe = null} : {recipe: Recipe | null}) => {
             <>
             
                 <Box component='div' sx={{ display:'flex', flexDirection:'row', width:'100%' }}>
-
+                    
                     <Box component='div' sx={{ display:'flex', flexDirection:'column', width:'50%', gap:4, mt:2 }}>
                                                   
                             <TextField type='text' label='Nombre de la Receta' size='small' required inputProps={{ maxLength:90 }}
