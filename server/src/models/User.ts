@@ -24,7 +24,7 @@ const UserSchema = new Schema<IUser>({
     },
     avatar: {
         type: String,
-        default: 'https://res.cloudinary.com/dcavctpft/image/upload/v1705686648/recipes/capybara-3247363_1280_w7aslo.jpg'
+        default: 'https://res.cloudinary.com/dcavctpft/image/upload/v1705873948/recipes/coco_xf92zy.jpg'
     }
 })
 

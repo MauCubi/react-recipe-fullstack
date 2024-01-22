@@ -73,6 +73,7 @@ export const checkAuthToken = () => {
 
         try {
             const { data } = await recipeApi.get('auth/renew')
+            console.log(data)
             localStorage.setItem('token', data.token)
             localStorage.setItem('token-init-date', new Date().getTime().toLocaleString() )
             await dispatch( onLogin({ name: data.name, uid: data.uid }) )    

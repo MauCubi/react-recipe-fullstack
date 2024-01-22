@@ -1,14 +1,16 @@
 import { Avatar, Button, Divider, Menu, MenuItem, Typography } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { useState } from 'react';
-import { startLogout } from '../../store/auth/thunks';
+import { useEffect, useState } from 'react';
+import { checkAuthToken, startLogout } from '../../store/auth/thunks';
 import { AccountCircle, KeyboardArrowDown, Logout, PostAdd, Settings } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { setUserSettingsStatus } from '../../store/user/userSlice';
 
 
 export const AccountMenu = () => {
 
     const { user } = useAppSelector( state => state.auth )
+    const { userSettingsStatus } = useAppSelector( state => state.user )
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const dispatch = useAppDispatch()
@@ -20,6 +22,14 @@ export const AccountMenu = () => {
     const handleClose = () => {
       setAnchorEl(null);
     };
+
+    useEffect(() => {
+        if (userSettingsStatus === 'savingcomplete') {
+            dispatch(checkAuthToken())            
+            dispatch(setUserSettingsStatus('idle'))
+            }    
+    }, [userSettingsStatus])
+    
 
 return (
     <>

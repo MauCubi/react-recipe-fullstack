@@ -116,8 +116,6 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const renewToken = async (req: IUserRequest, res: Response) => {
 
-    console.log(req)
-
     const uid = req.uid
     const name = req.name
     const user = await User.findById(uid)

@@ -5,14 +5,18 @@ import { useForm } from 'react-hook-form';
 import { Box, Button, CircularProgress, Divider, Typography } from '@mui/material';
 import { SaveOutlined } from '@mui/icons-material';
 import { DevTool } from '@hookform/devtools';
+import { startSavingUserSettings } from '../../store/user/thunks';
+import { checkAuthToken } from '../../store/auth/thunks';
+import { setUserSettingsStatus } from '../../store/user/userSlice';
 
 export type SettingsFormData = {    
-  avatar: string | FileList | ArrayBuffer
+  avatar: string | FileList
 };
 
 export const UserSettings = () => {
 
   const { user } = useAppSelector(state => state.auth)
+  const { userSettingsStatus } = useAppSelector(state => state.user)
   const dispatch = useAppDispatch()  
   const imageRef= useRef<null | HTMLDivElement>(null)
   
@@ -48,8 +52,7 @@ export const UserSettings = () => {
         if (selectedFile.size > 100000000) {
             form.setError('avatar',{type:'custom', message:'El tamaño es muy grande'} , {shouldFocus: true})
         } else {
-            form.clearErrors('avatar')
-            console.log(errors)                         
+            form.clearErrors('avatar')                     
         }        
     }
   }
@@ -59,11 +62,22 @@ export const UserSettings = () => {
     form.setValue('avatar', user?.avatar as string)
     setImagePreview(user?.avatar)
     
-  }, [user?.avatar])
+  }, [user?.avatar, form])
+
+  // useEffect(() => {
+
+  //   if (userSettingsStatus === 'savingcomplete') {
+  //     dispatch(checkAuthToken)
+  //     console.log('YEAH')
+  //     dispatch(setUserSettingsStatus('idle'))
+  //   }    
+  // }, [userSettingsStatus, dispatch])
+  
   
 
   const onSubmit = async ( data: SettingsFormData ) => {         
-    
+    dispatch(startSavingUserSettings(data, user?.uid as string))
+    form.reset({}, { keepValues: true })
   }  
 
   return (
