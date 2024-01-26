@@ -13,10 +13,6 @@ import { Link } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
 
-
-
-
-
 export const RecipeShow = () => {
 
   const {id} = useParams()
@@ -29,7 +25,7 @@ export const RecipeShow = () => {
   const { status, user } = useAppSelector( state => state.auth )
   const { reviews, reviewsInfo } = useAppSelector( state => state.review)
 
-  const Toast = Swal.mixin({
+   const Toast = Swal.mixin({
     toast: true,
     position: 'bottom-left',
     iconColor: 'white',
@@ -164,6 +160,8 @@ export const RecipeShow = () => {
 
             </Box>
 
+
+            
             <Typography 
               className='recipe-top-recipename' 
               component='h3' 
@@ -244,8 +242,16 @@ export const RecipeShow = () => {
 
             <Box className='recipe-uploader-info' component='div' sx={{ display:'flex', flexDirection:'row', mt:2}}>
                 <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem'}}>Receta subida por</Typography>
-                <Avatar sx={{ width: 20, height: 20, mx: 1 }} src={activeRecipe.user.avatar} />
-                <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem', fontWeight:600}}>{ activeRecipe?.user.name}</Typography>
+
+                <Link to={`/usuario/${activeRecipe.user._id}/${activeRecipe.user.name.replace(/ /g, '-')}`} style={{ textDecoration:'none'}}>     
+                  <Box component='div' sx={{ display:'flex', flexDirection:'row' }}>
+                    <Avatar sx={{ width: 20, height: 20, mx: 1 }} src={activeRecipe.user.avatar} />
+                    <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem', fontWeight:600, color:'black'}}>
+                      { activeRecipe?.user.name}
+                    </Typography>
+                  </Box>             
+                </Link>
+
             </Box>
 
             <Box className='recipe-bottom-info' component='div' sx={{ display:'flex', mt:'auto', flexDirection:'column' }}>

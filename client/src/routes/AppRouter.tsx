@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { useEffect } from 'react';
 import { RecipeRoutes } from './recipe/RecipeRoutes';
 import { UserSettings } from '../pages/user/UserSettings';
+import { UserRoutes } from './user/UserRoutes';
 
 
 export const AppRouter = () => {  
@@ -29,8 +30,12 @@ export const AppRouter = () => {
     <Routes>
 
         <Route path='/' element={ <Home /> } />
-        <Route path='/*' element={ <Navigate to='/'/> } />       
-        <Route path='/recetas/*' element={ <RecipeRoutes /> } />       
+        <Route path='/*' element={ <Navigate to='/'/> } />      
+        <Route path='/recetas/*' element={ <RecipeRoutes /> } />    
+
+
+        <Route path='/usuario/*' element={ <UserRoutes /> } />       
+
              
 
         {

@@ -8,6 +8,7 @@ import { DevTool } from '@hookform/devtools';
 import { startSavingUserSettings } from '../../store/user/thunks';
 import { checkAuthToken } from '../../store/auth/thunks';
 import { setUserSettingsStatus } from '../../store/user/userSlice';
+import Swal from 'sweetalert2';
 
 export type SettingsFormData = {    
   avatar: string | FileList
@@ -19,6 +20,18 @@ export const UserSettings = () => {
   const { userSettingsStatus } = useAppSelector(state => state.user)
   const dispatch = useAppDispatch()  
   const imageRef= useRef<null | HTMLDivElement>(null)
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'bottom-left',
+    iconColor: 'white',
+    customClass: {
+      popup: 'colored-toast',
+    },
+    showConfirmButton: false,
+    timer: 2000,
+    timerProgressBar: true,
+  })
   
   const form = useForm<SettingsFormData>({			
       defaultValues: {
@@ -72,6 +85,18 @@ export const UserSettings = () => {
   //     dispatch(setUserSettingsStatus('idle'))
   //   }    
   // }, [userSettingsStatus, dispatch])
+
+  useEffect(() => {
+    if (userSettingsStatus === 'savingcomplete') {
+        dispatch(checkAuthToken())            
+        dispatch(setUserSettingsStatus('idle'))
+        Toast.fire({
+          icon: 'success',
+          title: 'Cambios guardados'
+        })      
+
+        }    
+}, [userSettingsStatus, dispatch])
   
   
 
@@ -103,6 +128,7 @@ export const UserSettings = () => {
                           component='input'
                           type='image'
                           src={ imagePreview as string }
+                          disabled={userSettingsStatus==='saving'}
                           sx={{ 
                               width:'160px', height:'160px', 
                               alignSelf:'center',
@@ -130,9 +156,10 @@ export const UserSettings = () => {
                 </Box>
 
 
+
                 <Box component='div' sx={{ display:'flex', mt:8, justifyContent:'end' }}>
                     <Button 
-                        startIcon={<SaveOutlined />} 
+                        startIcon={(userSettingsStatus==='saving')?<CircularProgress size={20} sx={{ color:'#00000042' }}/>:<SaveOutlined />} 
                         variant="contained" 
                         type='submit' 
                         disabled={!form.formState.isDirty}

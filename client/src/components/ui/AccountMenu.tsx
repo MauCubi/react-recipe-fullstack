@@ -1,16 +1,14 @@
 import { Avatar, Button, Divider, Menu, MenuItem, Typography } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { useEffect, useState } from 'react';
-import { checkAuthToken, startLogout } from '../../store/auth/thunks';
+import { useState } from 'react';
+import { startLogout } from '../../store/auth/thunks';
 import { AccountCircle, KeyboardArrowDown, Logout, PostAdd, Settings } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
-import { setUserSettingsStatus } from '../../store/user/userSlice';
 
 
 export const AccountMenu = () => {
 
     const { user } = useAppSelector( state => state.auth )
-    const { userSettingsStatus } = useAppSelector( state => state.user )
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const dispatch = useAppDispatch()
@@ -22,13 +20,6 @@ export const AccountMenu = () => {
     const handleClose = () => {
       setAnchorEl(null);
     };
-
-    useEffect(() => {
-        if (userSettingsStatus === 'savingcomplete') {
-            dispatch(checkAuthToken())            
-            dispatch(setUserSettingsStatus('idle'))
-            }    
-    }, [userSettingsStatus])
     
 
 return (
@@ -91,7 +82,7 @@ return (
                 </MenuItem>
             </Link>
             
-            <Link to='/usuario/agregar-receta' style={{ textDecoration:'none'}}>
+            <Link to={`/usuario/${user?.uid}/${user?.name.replace(/ /g, '-')}`} style={{ textDecoration:'none'}}>
                 <MenuItem onClick={handleClose}>
                     <AccountCircle sx={{ fontSize:'20px', mr:1, color:'black'  }}/>
                     <Typography sx={{ fontSize:'14px', color:'black' }}>

@@ -1,12 +1,14 @@
 import { AxiosError } from 'axios';
 
 export interface User {
+    _id: string,
     uid: string,
     name: string,
     email: string,
     password: string,
     avatar: string
 }
+
 
 export interface ITime {
     time: number,
