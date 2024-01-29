@@ -151,6 +151,38 @@ export const getMyRecipes = async (req: RecipeRequest, res: Response) => {
 
 }
 
+export const getProfileRecipes = async (req: RecipeRequest, res: Response) => {    
+
+    const page = req.query.page || 1
+    const skip = (page as number - 1) * ITEM_PER_PAGE
+
+    const sortBy = req.query.sortBy || 'createdAt'
+    const sortOrder = req.query.sortOrder || 'asc'
+    
+    const countPromise = Recipe.find({ user: req.params.id }).countDocuments()
+
+    const recipesPromise = Recipe.find({ user: req.params.id })
+        .populate('user', ['name', 'email'])
+        .populate('category', ['name'])
+        .skip(skip)
+        .limit(ITEM_PER_PAGE)
+        .sort({[sortBy.toString()]: (sortOrder==='asc')?1:-1})    
+
+    const [count, recipes] = await Promise.all([countPromise, recipesPromise])
+
+    const pageCount = count / ITEM_PER_PAGE
+
+        return res.json({
+            ok: true,
+            recipes,
+            pagination:{
+                count,
+                pageCount
+            }
+        })
+
+}
+
 export const getRecipesBySearch = async (req: Request, res: Response) => {
 
     const search = req.params.search.trim()    

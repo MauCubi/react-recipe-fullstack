@@ -1,12 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { User } from '../../types';
+import { ProfileUser } from '../../types';
 
 export interface userSlice {
-    userProfile: User | null,
+    userProfile: ProfileUser | null,
     userSettingsStatus: 'idle' | 'saving' | 'savingcomplete'
     
 }
-
 
 const initialState: userSlice = {    
     userProfile: null,

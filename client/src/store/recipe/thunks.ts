@@ -7,13 +7,13 @@ import { imageUpload } from '../../helpers/imageUpload'
 import { FormRecipeData } from '../../components/recipes/createUpdatePage/RecipeForm';
 
 
-export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: string, page?: number, search?:string) => {     
+export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: string, page?: number, search?:string, userid?:string) => {     
     
     return async( dispatch: AppDispatch ) => {        
 
         try {           
             
-            dispatch(setLoadingRecipes(true))            
+            dispatch(setLoadingRecipes(true))  
 
             if (category) {                    
                 if (category === 'mis-favoritos') {
@@ -29,6 +29,9 @@ export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: 
             } else if(search){
                 const { data } = await recipeApi.get(`/recipes/search/${search}?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                    
                 dispatch(onLoadRecipes(data))
+            } else if(userid){
+                const { data } = await recipeApi.get(`/recipes/profile/${userid}?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)            
+                dispatch(onLoadRecipes(data))        
             } else {
                 const { data } = await recipeApi.get(`/recipes?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                    
                 dispatch(onLoadRecipes(data))

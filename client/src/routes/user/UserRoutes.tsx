@@ -9,7 +9,7 @@ export const UserRoutes = () => {
     <NavBar />
     <Routes >       
 
-        <Route path=':id/:name' element={ <UserProfile /> } />    
+        <Route path=':userid/:name' element={ <UserProfile /> } />    
         
     </Routes>
   </>

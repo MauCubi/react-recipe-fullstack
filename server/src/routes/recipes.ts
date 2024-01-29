@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { addFavoriteRecipe, createRecipe, deleteRecipe, getFavoritesRecipes, getFullFavoritesRecipes, getMyRecipes, getRecipe, getRecipes, getRecipesByCategory, getRecipesBySearch, getRecipesSugestion, updateRating, updateRecipe } from '../controllers/recipes';
+import { addFavoriteRecipe, createRecipe, deleteRecipe, getFavoritesRecipes, getFullFavoritesRecipes, getMyRecipes, getProfileRecipes, getRecipe, getRecipes, getRecipesByCategory, getRecipesBySearch, getRecipesSugestion, updateRating, updateRecipe } from '../controllers/recipes';
 import { check } from 'express-validator';
 import { validateJWT } from '../middlewares/jwt-validators';
 import { fieldValidator } from '../middlewares/field-validators';
@@ -66,6 +66,9 @@ router.get('/search/:search', getRecipesBySearch)
 
 // Busca de sugerencias para el searchbox
 router.get('/sugestion/:search', getRecipesSugestion)
+
+// Busca de recetas del perfil
+router.get('/profile/:id', getProfileRecipes)
 
 
 module.exports = router

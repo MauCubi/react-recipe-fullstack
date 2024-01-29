@@ -9,6 +9,13 @@ export interface User {
     avatar: string
 }
 
+export interface ProfileUser extends User {
+    recipesCount: number,
+    favoritesCount: number,
+    reviewsCount: number,
+    commentsCoun: number
+}
+
 
 export interface ITime {
     time: number,

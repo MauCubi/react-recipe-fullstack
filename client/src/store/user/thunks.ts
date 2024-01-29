@@ -14,9 +14,9 @@ export const startLoadingUserProfile = ( id: string ) => {
             
             try {        
 
-                const { data } = await recipeApi.get(`/user/${id}`)       
+                const { data } = await recipeApi.get(`/users/${id}`)    
 
-                dispatch(onLoadUserProfile(data))   
+                dispatch(onLoadUserProfile(data))
 
             } catch (error) {
                 console.log('Error cargando perfil de usuario')

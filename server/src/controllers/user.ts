@@ -42,28 +42,31 @@ export const updateUser = async (req: UserRequest, res: Response) => {
 
 export const getUser = async (req: UserRequest, res: Response) => {
 
-    const id = req.params.id
-
-    
+    const id = req.params.id    
 
     try {
 
-        const user = await User.findById(id)
+        const userPromise = User.findById(id)
+        const recipesPromise = Recipe.find({user: id})
+        const favoritesCountPromise = Favorite.find({user: id}).countDocuments()
+        const reviewsPromise = Review.find({user: id}) 
 
-        const recipesCount = await Recipe.find({user: id}).countDocuments()
-        const favoritesCount = await Favorite.find({user: id}).countDocuments()
-        const reviewCount = await Review.find({user: id}).countDocuments()
-        const commentCount = await Review.find({user: id, comment : {"$exists" : true, "$ne" : ""}}).countDocuments()      
+        const  [user, recipes, favoritesCount, reviews]  = await Promise.all([userPromise, recipesPromise, favoritesCountPromise, reviewsPromise])
+        
+        const commentsCount = reviews.filter( x => x.comment !== '' ).length
+        const reviewsCount = reviews.length
+        const recipesCount = recipes.length
         
 
         res.json({
             ok: true,
-            username: user.name,
+            name: user.name,
             avatar: user.avatar,
+            recipes,
             recipesCount,
             favoritesCount,
-            reviewCount,
-            commentCount
+            reviewsCount,
+            commentsCount
         })
 
         

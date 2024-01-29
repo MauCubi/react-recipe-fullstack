@@ -15,7 +15,7 @@ export const RecipeGridWrapper = () => {
   const dispatch = useAppDispatch()
 
   const { pagination } = useAppSelector( state => state.recipe)
-  const { category, search } = useParams()
+  const { category, search, userid } = useParams()
 
   const handleSortOrder = () => {
 
@@ -28,7 +28,7 @@ export const RecipeGridWrapper = () => {
   }
 
   useEffect(() => {     
-    dispatch( startLoadingRecipes(sortBy, sortOrder, category, page, search) )    
+    dispatch( startLoadingRecipes(sortBy, sortOrder, category, page, search, userid) )    
   }, [page, category, sortBy, sortOrder])
 
 
@@ -38,9 +38,11 @@ export const RecipeGridWrapper = () => {
     <Grid container item sx={{ justifyContent:'space-between', mt:4, alignItems:'center' }} xs={10}>       
       {
         (category)
-        ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>{(category.charAt(0).toUpperCase() + category.slice(1)).replace(/-/g, ' ')}</Typography>
+          ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>{(category.charAt(0).toUpperCase() + category.slice(1)).replace(/-/g, ' ')}</Typography>
         :(search)
           ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Busqueda: {search.replace(/-/g, ' ')}</Typography>
+        :(userid)
+          ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Recetas del usuario</Typography>
           :<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Todas las recetas</Typography>
       }
 
