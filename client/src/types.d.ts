@@ -13,7 +13,7 @@ export interface ProfileUser extends User {
     recipesCount: number,
     favoritesCount: number,
     reviewsCount: number,
-    commentsCoun: number
+    commentsCount: number
 }
 
 

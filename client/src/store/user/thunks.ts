@@ -2,7 +2,7 @@ import recipeApi from '../../api/recipeApi'
 import { imageUpload } from '../../helpers/imageUpload'
 import { SettingsFormData } from '../../pages/user/UserSettings'
 import { AppDispatch } from '../store'
-import { onLoadUserProfile, setUserSettingsStatus } from './userSlice'
+import { onLoadUserProfile, setUserProfileStatus, setUserSettingsStatus } from './userSlice'
 
 
 
@@ -10,7 +10,9 @@ import { onLoadUserProfile, setUserSettingsStatus } from './userSlice'
 
 export const startLoadingUserProfile = ( id: string ) => {    
 
-    return async( dispatch: AppDispatch ) => {         
+    return async( dispatch: AppDispatch ) => {     
+        
+            dispatch(setUserProfileStatus('loading'))
             
             try {        
 

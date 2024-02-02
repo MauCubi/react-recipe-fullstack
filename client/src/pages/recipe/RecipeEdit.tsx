@@ -4,12 +4,14 @@ import { useParams } from 'react-router-dom';
 import { startLoadingRecipe } from '../../store/recipe/thunks';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { RecipeForm } from '../../components/recipes/createUpdatePage/RecipeForm';
+import { DoDisturb } from '@mui/icons-material';
 
 
 export const RecipeEdit = () => {    
 
     const { id } = useParams()
     const { activeRecipe } = useAppSelector( state => state.recipe)
+    const { user } = useAppSelector( state => state.auth)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
@@ -27,7 +29,15 @@ export const RecipeEdit = () => {
             {
                 (activeRecipe!==null && activeRecipe._id === id)
                 ?
-                    <RecipeForm recipe={activeRecipe} />
+                    (activeRecipe.user._id === user?.uid)
+                    ?
+                        <RecipeForm recipe={activeRecipe} />
+                    : 
+                    <Box component='div' sx={{ display:'flex', flexDirection:'column', mt:10 }}>
+                        <DoDisturb sx={{ alignSelf:'center', fontSize:'100px', color:'red' }} />
+                        <Typography variant='h3' sx={{ textAlign:'center'}}>NO PUEDE EDITAR ESTA RECETA</Typography>
+                    </Box>
+
                 :
                     <Box component='div' sx={{ display:'flex', justifyContent:'center', alignItems:'center', minHeight:'50vh' }}>
                         <CircularProgress sx={{ fontSize:'200px' }}/>

@@ -29,7 +29,7 @@ export const RecipeGridWrapper = () => {
 
   useEffect(() => {     
     dispatch( startLoadingRecipes(sortBy, sortOrder, category, page, search, userid) )    
-  }, [page, category, sortBy, sortOrder])
+  }, [page, category, sortBy, sortOrder, userid])
 
 
   return (

@@ -82,10 +82,10 @@ export const startLoadingRecipe = (id: string) => {
 
             } catch (error) {
 
-                console.log('Error cargando recetas')
+                console.log('Error cargando receta')
                 if (error instanceof AxiosError) {                    
-                    if (error.response?.data.msg === 'Id Invalido') {
-                        console.log('Error en el id')
+                    if (error.response?.status === 404) {
+                        console.log('La receta no existe')
                         window.location.href='/recipes/404'
                     }
                 } else {

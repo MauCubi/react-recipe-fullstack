@@ -3,12 +3,14 @@ import { ProfileUser } from '../../types';
 
 export interface userSlice {
     userProfile: ProfileUser | null,
+    userProfileStatus: 'idle' | 'loading'
     userSettingsStatus: 'idle' | 'saving' | 'savingcomplete'
     
 }
 
 const initialState: userSlice = {    
     userProfile: null,
+    userProfileStatus:  'idle',
     userSettingsStatus: 'idle'
   }
 
@@ -19,6 +21,7 @@ export const userSlice = createSlice({
     reducers: {
         onLoadUserProfile: ( state, { payload } ) => {            
             state.userProfile = payload
+            state.userProfileStatus = 'idle'
         },
         onSavingUserSettings: (state) => {
             state.userSettingsStatus = 'savingcomplete'
@@ -26,6 +29,9 @@ export const userSlice = createSlice({
         },
         setUserSettingsStatus: (state, { payload }) => {
             state.userSettingsStatus = payload
+        },
+        setUserProfileStatus: (state, { payload }) => {
+            state.userProfileStatus = payload
         },
         
     }
@@ -35,5 +41,6 @@ export const userSlice = createSlice({
 export const {
     onLoadUserProfile,
     onSavingUserSettings,
-    setUserSettingsStatus
+    setUserSettingsStatus,
+    setUserProfileStatus
 } = userSlice.actions
