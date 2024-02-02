@@ -1,4 +1,4 @@
-import { Box, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Pagination, Select, Typography } from '@mui/material'
+import { Box, CircularProgress, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Pagination, Select, Typography } from '@mui/material'
 import {  useParams } from 'react-router-dom'
 import { RecipeGrid } from './RecipeGrid'
 import { useEffect, useState } from 'react'
@@ -14,7 +14,7 @@ export const RecipeGridWrapper = () => {
 
   const dispatch = useAppDispatch()
 
-  const { pagination } = useAppSelector( state => state.recipe)
+  const { pagination, recipes, isLoadingRecipes } = useAppSelector( state => state.recipe)
   const { category, search, userid } = useParams()
 
   const handleSortOrder = () => {
@@ -90,7 +90,19 @@ export const RecipeGridWrapper = () => {
             
     <Grid container item spacing={6} xs={10} sx={{ minHeight:'70vh' }}>
 
-      <RecipeGrid />        
+      {
+        (isLoadingRecipes)
+        ?
+        <Box component='div' sx={{ display:'flex', justifyContent:'center', alignContent:'center', width:'100%', mt:'150px' }}>
+          <CircularProgress/>   
+        </Box>             
+        :(recipes?.length === 0)
+        ?
+        <Box component='div' sx={{ display:'flex', justifyContent:'center', alignContent:'center', width:'100%', mt:'150px' }}>
+          <Typography variant='h4' color='gray'>No se han encontrado recetas</Typography>  
+        </Box>
+        :<RecipeGrid/>
+      }      
         
     </Grid>
     
