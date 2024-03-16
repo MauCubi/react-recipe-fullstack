@@ -35,6 +35,10 @@ return (
                 borderColor:(Boolean(anchorEl) === true)?'white':'',  
                 borderRadius:1,
                 px:1,
+                width:{
+                    xs:'auto',
+                    sm:'auto'
+                },
                 fontSize: 14,
                 ":hover":{
                     backgroundColor:'primary.light',
@@ -43,11 +47,11 @@ return (
             }} 
             
         >            
-        <Avatar sx={{ width: 27, height: 27, mr: 1 }} src={ user?.avatar }/>   
-            <Typography sx={{ fontFamily:'sans-serif' }}>
+            <Avatar sx={{ width: 27, height: 27, mr: { xs:0,sm:1 } }} src={ user?.avatar }/>   
+            <Typography sx={{ fontFamily:'sans-serif', display:{ xs:'none', sm:'flex' } }}>
             { user?.name }
             </Typography>
-            <KeyboardArrowDown sx={{ fontSize:18, ml:1 }}/>
+            <KeyboardArrowDown sx={{ fontSize:18, ml:1, display:{ xs:'none', sm:'flex' } }}/>
 
         </Button>    
         <Menu

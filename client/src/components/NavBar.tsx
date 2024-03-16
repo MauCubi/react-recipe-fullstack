@@ -25,12 +25,12 @@ export const NavBar = () => {
   const Styledbox = styled('div')({
     display: 'flex',
     alignItems: 'center',
-    gap: 5    
+    // gap: 5,
   })
 
   const StyledButton = (props: ButtonProps) => (
     <Button       
-      variant='outlined'      
+      variant='outlined'  
       onClick={ () => navigate('/auth/login') }
       sx={{ 
         color:'white', 
@@ -38,7 +38,7 @@ export const NavBar = () => {
         borderRadius:2,
         px:1.5,
         fontSize: 14,
-        borderColor:'white',
+        borderColor:{ xs:'primary', sm:'white' },
         ":hover":{
           backgroundColor:'primary.light',
           borderColor:'white'          
@@ -69,15 +69,15 @@ export const NavBar = () => {
     <>
       <AppBar position='sticky' sx={{ backgroundColor:'primary' }}>
         <Toolbar sx={{ display:'flex', justifyContent:'space-between' }}>
-          <Box display='flex' sx={{ alignItems:'center' }}>
+          <Box display='flex' sx={{ alignItems:'center', pr:{ xs:2,sm:0} }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
               edge="start"
               onClick={ handleDrawerToggle }
-              sx={{ mr: 2 }}
+              sx={{ mr:1 }}
             >
-              <MenuIcon />
+              <MenuIcon sx={{ fontSize:{xs:16, sm:20} }} />
             </IconButton>
             <Link to='/' style={{ textDecoration:'none' }}>
               <Box display='flex' sx={{ alignItems:'center', gap:1}}>
@@ -98,8 +98,9 @@ export const NavBar = () => {
             :
               <Styledbox>          
                 <StyledButton>            
-                  <AccountCircle sx={{ color:'white', mr:1 }}/>            
-                  Ingresar
+                  <AccountCircle sx={{ color:'white', mr:0, p:0 }}/>                       
+                  <Typography sx={{ display:{ xs:'none', sm:'flex' }, fontSize:'0.85rem', ml:'0.25rem'  }}>Ingresar</Typography>
+                  
                 </StyledButton>    
               </Styledbox>
           }          

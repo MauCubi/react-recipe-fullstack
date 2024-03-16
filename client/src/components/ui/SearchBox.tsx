@@ -81,7 +81,7 @@ export const SearchBox = () => {
 
 
   return (
-    <Box component='div' sx={{ display:'flex', flexDirection:'column', width:'40%', position:'relative' }}>
+    <Box component='div' sx={{ display:'flex', flexDirection:'column', width:{ xs:'60%',sm:'40%' }, position:'relative' }}>
         <Box component='div'  sx={{
             position: 'relative',
             borderRadius: customTheme.shape.borderRadius,
@@ -96,7 +96,7 @@ export const SearchBox = () => {
             },
         }}>
             <SearchIconWrapper>
-                <SearchIcono />
+                <SearchIcono sx={{ fontSize:{ xs:'16px', sm:'27px' } }} />
             </SearchIconWrapper>
             <Input
                 name='search'
@@ -109,6 +109,7 @@ export const SearchBox = () => {
                 autoComplete='off'
                 sx={{                
                     fontFamily:'Hedvig Letters Serif',
+                    fontSize:{ xs:'12px', sm:'14px' },
                     color: 'black',                
                     width:'100%',
                     '& .MuiInputBase-input': {
@@ -130,7 +131,7 @@ export const SearchBox = () => {
                 borderColor:'GrayText',
                 borderRadius:'3px',
                 borderWidth:'1px',
-                marginLeft: customTheme.spacing(3),
+                marginLeft: { sx:customTheme.spacing(0), sm:customTheme.spacing(3) },
                 width:'100%',
                 top:'40px',
             }}
@@ -165,7 +166,7 @@ export const SearchBox = () => {
                                         <Typography 
                                             sx={{ 
                                                 fontFamily:'Hedvig Letters Serif', 
-                                                fontSize:'14px', 
+                                                fontSize:{ xs:'12px', sm:'14px' }, 
                                                 color:'black', 
                                                 textDecoration:'none',
                                                 textAlign:'left'

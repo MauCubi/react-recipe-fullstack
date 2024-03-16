@@ -101,7 +101,7 @@ export const RecipeShow = () => {
           display:'flex', 
           width:'90%', 
           flexDirection:'column',
-          my:'62px',
+          my:{xs:'40px', sm:'62px'},
           borderRadius:'10px',
           backgroundColor:'white',
           boxShadow:3,
@@ -117,7 +117,7 @@ export const RecipeShow = () => {
       </Box>
       :
         <>
-        <Box className='recipe-top-section' component='div' sx={{ display:'flex' }}>
+        <Box className='recipe-top-section' component='div' sx={{ display:'flex', flexDirection:{xs:'column', sm:'row'} }}>
 
           <Box 
             className='recipe-top-image' 
@@ -125,12 +125,21 @@ export const RecipeShow = () => {
             src={activeRecipe?.image}
             sx={{ 
               height:'360px', 
-              width:'470px',
+              width:{xs:'385', sm:'470px'},
               borderRadius:'15px' 
             }} 
           />
           
-          <Box className='recipe-top-details' component='div' sx={{ display:'flex', flexDirection:'column', ml:'50px', height:'100%', width:'100%' }}>
+          <Box className='recipe-top-details' component='div' 
+            sx={{ 
+              display:'flex', 
+              flexDirection:'column', 
+              ml:{xs:'0px',sm:'50px'}, 
+              mt:{ xs:'20px', sm:'0px' }, 
+              height:'100%',
+              width:'100%' 
+            }}
+          >
             <Box display='flex' component='div' sx={{justifyContent:'space-between'}}>
               <Typography 
                 className='recipe-top-category' 
@@ -186,7 +195,7 @@ export const RecipeShow = () => {
               }}
             >
               
-              <Box className='recipe-top-review-info' component='div' sx={{ display:'flex', flexDirection:'row' }}>
+              <Box className='recipe-top-review-info' component='div' sx={{ display:'flex', flexDirection:{xs:'column', sm:'row'} }}>
 
                 <Box className='rating-box' sx={{ display:'flex', cursor:'pointer', textDecoration:'none' }} href='#reviews' component='a'>
                   {
@@ -198,41 +207,46 @@ export const RecipeShow = () => {
                     : <Typography sx={{ color:'grey'}}>Sin reseñas</Typography>
                   }
                 </Box>
+                
+                <Divider orientation='vertical' sx={{ display:{xs:'none', sm:'block'}, height:'25px', mx:2}} />
 
-                <Divider orientation='vertical' sx={{ height:'25px', mx:2}} />
+                <Box component='div' sx={{ display:'flex', flexDirection:'row', alignContent:'center', alignItems:'center', mt:{xs:'8px', sm:'0px'} }}>
 
-                <Typography sx={{ color:'grey'}}>{ reviews.filter( x => x.comment !== '' ).length } Comentarios</Typography>
+                  <Typography sx={{ color:'grey'}}>{ reviews.filter( x => x.comment !== '' ).length } Comentarios</Typography>
 
 
-                <Divider orientation='vertical' sx={{ height:'25px', mx:2}} />
+                  <Divider orientation='vertical' sx={{ isplay:{xs:'none', sm:'block'}, height:'25px', mx:2}} />
 
-                <Button 
-                  startIcon={
-                    (favorites?.includes(activeRecipe?._id as string))
-                    ?<Favorite/>
-                    :<FavoriteBorderOutlined/>
-                  } 
-                  disableRipple
-                  sx={{ 
-                    p:0, 
-                    textTransform:'none', 
-                    fontFamily:'sans-serif',
-                    color:'error.main',
-                    ":hover":{
-                      backgroundColor:'inherit',
-                      color:'error.light'
-                    }
-                  }}
-                  onClick={ () => { 
-                    if (status === 'authenticated') {
-                      dispatch(startAddRemoveFavorite(activeRecipe?._id as string))                           
-                    } else {
-                      alert('Tenes que iniciar sesion!')
-                    }
-                  }}
-                >
-                  Favorito
-                </Button>              
+                  <Button 
+                    startIcon={
+                      (favorites?.includes(activeRecipe?._id as string))
+                      ?<Favorite/>
+                      :<FavoriteBorderOutlined/>
+                    } 
+                    disableRipple
+                    sx={{ 
+                      p:0, 
+                      textTransform:'none', 
+                      fontFamily:'sans-serif',
+                      color:'error.main',
+                      ":hover":{
+                        backgroundColor:'inherit',
+                        color:'error.light'
+                      }
+                    }}
+                    onClick={ () => { 
+                      if (status === 'authenticated') {
+                        dispatch(startAddRemoveFavorite(activeRecipe?._id as string))                           
+                      } else {
+                        alert('Tenes que iniciar sesion!')
+                      }
+                    }}
+                  >
+                    Favorito
+                  </Button>              
+                </Box>
+
+
 
               </Box>
 
@@ -255,15 +269,15 @@ export const RecipeShow = () => {
             </Box>
 
             <Box className='recipe-bottom-info' component='div' sx={{ display:'flex', mt:'auto', flexDirection:'column' }}>
-              <Box sx={{ display:'flex', color:'gray', mt:1}}>
+              <Box sx={{ display:'flex', color:'gray', mt:1, alignItems:'center'}}>
                 <AccessTime/>
-                <Typography sx={{ ml:0.5 }}>
+                <Typography sx={{ fontSize:'0.800rem', ml:0.5 }}>
                   { activeRecipe?.cookTime.time} { activeRecipe?.cookTime.unit},
                 </Typography>                
-                <Typography sx={{ ml:0.5 }}>
+                <Typography sx={{ fontSize:'0.800rem', ml:0.5 }}>
                   { activeRecipe?.ingredients.length } Ingredientes,
                 </Typography>                
-                <Typography sx={{ ml:0.5 }}>
+                <Typography sx={{ fontSize:'0.800rem', ml:0.5 }}>
                   { activeRecipe?.steps.length } Pasos
                 </Typography>                
               </Box>
@@ -275,7 +289,7 @@ export const RecipeShow = () => {
 
         <Divider sx={{ my:4 }}/>
 
-        <Box className='recipe-ingredients' component='div' sx={{ display:'flex', flexDirection:'column', px:16 }}>
+        <Box className='recipe-ingredients' component='div' sx={{ display:'flex', flexDirection:'column', px:{xs:0, sm:16} }}>
 
           <Typography variant='h5' sx={{ fontFamily:'serif', fontWeight:600 }}>Ingredientes</Typography>
 
@@ -295,7 +309,7 @@ export const RecipeShow = () => {
 
         </Box>
 
-        <Box className='recipe-steps' component='div' sx={{ display:'flex', flexDirection:'column', px:16 }}>
+        <Box className='recipe-steps' component='div' sx={{ display:'flex', flexDirection:'column', px:{xs:0, sm:16} }}>
 
           <Typography variant='h5' sx={{ fontFamily:'serif', fontWeight:600 }}>Pasos a seguir</Typography>
 
@@ -310,7 +324,7 @@ export const RecipeShow = () => {
 
         <Divider sx={{ my:2 }}/>
 
-        <Box className='recipe-reviews' id='reviews' component='div' sx={{ display:'flex', flexDirection:'column', px:16 }}>
+        <Box className='recipe-reviews' id='reviews' component='div' sx={{ display:'flex', flexDirection:'column', px:{xs:0, sm:16} }}>
 
           <Box className='review-rating-box' sx={{ display:'flex', alignItems:'center', mb:2 }}>
             <Typography variant='h5' sx={{ fontFamily:'serif', fontWeight:600 }}>Reseñas           

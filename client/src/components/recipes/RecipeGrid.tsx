@@ -21,7 +21,7 @@ export const RecipeGrid = () => {
             (!isLoadingRecipes) && (recipes?.length !== 0)?       
             recipes?.map( recipe => (        
                 
-              <Grid key={ recipe._id } item xs={4} className='animate__animated animate__fadeIn' sx={{ animationDuration: '0.5s' }}>
+              <Grid key={ recipe._id } item sm={4} xs={12} className='animate__animated animate__fadeIn' sx={{ animationDuration: '0.5s' }}>
                 <Card sx={{ width: '100%', height: 340 }}>
                   <Link to={`/recetas/${recipe._id}/${recipe.name.replace(/ /g, '-')}`} style={{ textDecoration:'none' }}>                  
                     <CardActionArea>

@@ -1,5 +1,5 @@
 import { DevTool } from '@hookform/devtools';
-import { Avatar, Box, Button, Divider, Rating, TextField, Typography } from '@mui/material'
+import { Avatar, Box, Button, Divider, IconButton, Rating, TextField, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { startCreatingReview, startDeletingReview, startUpdatingReview } from '../../../store/review/thunks';
@@ -15,6 +15,8 @@ export type FormReviewData = {
     comment: string,
     recipe: string
 }
+
+
 
 
 export const RecipeReviewForm = () => {
@@ -89,7 +91,7 @@ export const RecipeReviewForm = () => {
             border:0.5,
             borderColor:'#dce2e6',
             borderRadius:0.5,
-            width:'85%',
+            width:{xs:'100%',sm:'85%'},
             alignSelf:'center',
             p:2,
             boxShadow:3
@@ -103,28 +105,54 @@ export const RecipeReviewForm = () => {
                 <Box component='div' display='flex' justifyContent='space-between'>
                     <Typography variant='h6' sx={{ fontFamily:'serif'}}>Tu reseña</Typography>   
                     
-                    <Box component='div' display='flex' sx={{ gap:'1rem' }}>
+                    <Box component='div' display='flex' sx={{ gap:'1rem', justifyContent:'end' }}>
+
+                            <IconButton 
+                                size='small' 
+                                color='warning' 
+                                sx={{ 
+                                    display:{xs:'flex', sm:'none'}                                  
+                                }}
+                                onClick={() => dispatch(onChangeUserReviewStatus('editing'))}   
+                            >
+                                <Edit />
+                            </IconButton>
+
+                            <IconButton 
+                                size='small'  
+                                color='error'
+                                sx={{ 
+                                    display:{xs:'flex', sm:'none'}                                  
+                                }}
+                                onClick={ onDelete }
+                            >
+                                <Delete />
+                            </IconButton>
                         
                             <Button 
-                                startIcon={<Edit />} 
+                                startIcon={<Edit/>} 
                                 variant="contained" 
                                 size='small' 
                                 color="warning" 
-                                onClick={() => dispatch(onChangeUserReviewStatus('editing'))}
+                                onClick={() => dispatch(onChangeUserReviewStatus('editing'))}                                
                                 sx={{ 
-                                    textTransform:'none' 
+                                    textTransform:'none',
+                                    display:{xs:'none', sm:'flex'},
+                                    height:{xs:'40px',sm:'auto'}                                    
                                     }}
-                                >                            
+                                >                         
                                 Editar
                             </Button>
 
                             <Button 
-                                startIcon={<Delete />} 
+                                startIcon={<Delete/>} 
                                 variant="contained" 
                                 size='small' 
                                 color="error" 
                                 sx={{ 
-                                    textTransform:'none' 
+                                    textTransform:'none',
+                                    height:{xs:'40px',sm:'auto'},
+                                    display:{xs:'none', sm:'flex'},
                                     }}
                                 onClick={ onDelete }
                                 >                            
@@ -186,11 +214,16 @@ export const RecipeReviewForm = () => {
                         multiline 
                         minRows='3'
                         maxRows='3'
+                        InputLabelProps={{
+                            sx:{
+                                fontSize:'1rem'
+                            }
+                        }}
                         sx={{ 
                             mt:1.5, 
-                            backgroundColor:'white',
-                            
+                            backgroundColor:'white',                            
                         }} 
+                        
                         placeholder='¿Qué te parecio esta receta?'
                     {...register('comment')}
                     />

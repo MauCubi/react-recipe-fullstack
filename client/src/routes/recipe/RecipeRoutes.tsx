@@ -3,9 +3,10 @@ import { RecipeNotFound } from '../../pages/recipe/RecipeNotFound'
 import { NavBar } from '../../components/NavBar'
 import { RecipeCreate } from '../../pages/recipe/RecipeCreate'
 import { RecipeShow } from '../../pages/recipe/RecipeShow'
-import { RecipeIndex } from '../../pages/recipe/RecipeIndex'
+// import { RecipeIndex } from '../../pages/recipe/RecipeIndex'
 import { RecipeEdit } from '../../pages/recipe/RecipeEdit'
 import { RecipeGridWrapper } from '../../components/recipes/RecipeGridWrapper'
+import { Socials } from '../../components/Socials'
 
 
 export const RecipeRoutes = () => {
@@ -22,7 +23,8 @@ export const RecipeRoutes = () => {
           <Route path='buscar/:search' element={ <RecipeGridWrapper /> } />
           <Route path='/404' element={ <RecipeNotFound /> } />        
           
-      </Routes>
+      </Routes>             
+      <Socials/>  
     </>
   )
 }

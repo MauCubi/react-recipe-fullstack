@@ -35,19 +35,20 @@ export const RecipeGridWrapper = () => {
   return (
     <Grid display='flex' container alignItems='center' flexDirection='column' bgcolor='#e4f0ff66' minHeight='100vh'>
 
-    <Grid container item sx={{ justifyContent:'space-between', mt:4, alignItems:'center' }} xs={10}>       
-      {
-        (category)
-          ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>{(category.charAt(0).toUpperCase() + category.slice(1)).replace(/-/g, ' ')}</Typography>
-        :(search)
-          ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Busqueda: {search.replace(/-/g, ' ')}</Typography>
-        :(userid)
-          ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Recetas del usuario</Typography>
-          :<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Todas las recetas</Typography>
-      }
+    <Grid container item sx={{ justifyContent:'space-between', mt:4, alignItems:'center'}} xs={10}>       
+      <Box component='div' sx={{ display:'flex', justifyContent:'center', width:{ xs:'100%', sm:'auto' } }}>
+        {
+          (category)
+            ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>{(category.charAt(0).toUpperCase() + category.slice(1)).replace(/-/g, ' ')}</Typography>
+          :(search)
+            ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Busqueda: {search.replace(/-/g, ' ')}</Typography>
+          :(userid)
+            ?<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Recetas del usuario</Typography>
+            :<Typography variant='h5' fontFamily='Hedvig Letters Serif'>Todas las recetas</Typography>
+        }
+      </Box>
 
-      <Box component='div' sx={{ display:'flex', width:'auto' }}>
-        {/* <Button variant='contained'>Sort</Button> */}
+      <Box component='div' sx={{ display:'flex', justifyContent:{ xs:'center', sm:'normal' } ,width:{ xs:'100%', sm:'auto' }, mt:{ xs:'20px', sm:'0px' } }}>        
         <FormControl>
           <InputLabel id="sort-label">Ordenar Por</InputLabel>
           <Select 
@@ -88,7 +89,7 @@ export const RecipeGridWrapper = () => {
     </Grid>
     
             
-    <Grid container item spacing={6} xs={10} sx={{ minHeight:'70vh' }}>
+    <Grid container item spacing={6} xs={10} sx={{ minHeight:'70vh', flexDirection:{ xs:'column', sm:'row' } }}>
 
       {
         (isLoadingRecipes)
@@ -110,7 +111,12 @@ export const RecipeGridWrapper = () => {
       (pagination?.count!==0)
       ?
       <Grid sx={{ mb:2}} mt={4}>
-        <Pagination count={Math.ceil(pagination?.pageCount as number)} color="primary" page={page} onChange={ (event, pageNumber) => setPage(pageNumber)}/>
+        <Pagination count={Math.ceil(pagination?.pageCount as number)} color="primary" page={page} 
+          onChange={ (event, pageNumber) => {
+            setPage(pageNumber) 
+            window.scrollTo(0,0)}
+          }
+        />
       </Grid>
       :''      
     }
