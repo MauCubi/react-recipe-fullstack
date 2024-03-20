@@ -40,9 +40,9 @@ export const UserProfile = () => {
           component='div' 
           sx={{ 
             display:'flex',             
-            width:'70%', 
-            height:'300px',
-            flexDirection:'row',
+            width:{xs:'90%', sm:'70%'}, 
+            height:{xs:'auto',sm:'300px'},
+            flexDirection:{xs:'column', sm:'row'},
             mt:'42px',
             borderRadius:'10px',
             backgroundColor:'white',
@@ -54,7 +54,7 @@ export const UserProfile = () => {
           {
             (userProfileStatus==='idle')?
           <>         
-            <Box component='div' sx={{ display:'flex', flexDirection:'column', justifyContent:'center', mx:6, alignItems:'center' }}>                                                                            
+            <Box component='div' sx={{ display:'flex', flexDirection:'column', justifyContent:'center', mx:6, alignItems:'center', width:{xs:'auto', sm:'20%'} }}>                                                                            
               <Box
                 component='img'                                          
                 src={ userProfile?.avatar }
@@ -63,14 +63,15 @@ export const UserProfile = () => {
                   borderRadius:'50%',
                   }}                                                    
               />           
-              <Typography variant='h6' sx={{ fontFamily:'sans-serif', fontWeight:600}}>{ userProfile?.name }</Typography>                                    
+              <Typography sx={{ fontSize:'1.2rem', fontFamily:'sans-serif', fontWeight:600}}>{ userProfile?.name }</Typography>                                    
             </Box>
 
-            <Box component='div' sx={{ display:'flex' }}>
-              <Divider orientation='vertical' sx={{ height:'100%', width:'100%' }}/>
+            <Box component='div' sx={{ display:'flex', my:{xs:'1rem', sm:'0rem'} }}>
+              <Divider orientation='vertical' sx={{ height:'100%', width:'100%', display:{xs:'none', sm:'flex'} }}/>
+              <Divider orientation='horizontal' sx={{ height:'100%', width:'100%', display:{xs:'flex', sm:'none'} }}/>
             </Box>
 
-            <Box component='div' sx={{ display:'flex', flexDirection:'column', justifyContent:'center', gap:1.5, mx:6 }}>
+            <Box component='div' sx={{ display:'flex', flexDirection:'column', justifyContent:'center', gap:1.5, mx:{xs:0, sm:6} }}>
 
               <Box component='div' sx={{ display:'flex', flexDirection:'row'}}>
                 <CountText>{ userProfile?.recipesCount }</CountText>

@@ -13,7 +13,7 @@ export const RecipeReviewTotal = () => {
             <Box component='div' sx={{ display:'flex', justifyContent:'center', flexDirection:'column', width:{xs:'70%',sm:'50%'} }}>
                 <Box component='div' sx={{ display:'flex', justifyContent:'center', alignItems:'center', mb:2 }}>
                     <Rating value={reviewsInfo.average} readOnly precision={0.25}/>
-                    <Typography sx={{ fontFamily:'Hedvig Letters Serif', ml:1  }}>{reviewsInfo.average} / 5 ({reviewsInfo.num})</Typography>
+                    <Typography sx={{ fontFamily:'Hedvig Letters Serif', ml:1, fontSize:{xs:'12px', sm:'16px'}  }}>{reviewsInfo.average} / 5 ({reviewsInfo.num})</Typography>
                 </Box>
 
                 <Box component='div' sx={{ display:'flex', flexDirection:'column-reverse', justifyContent:'center' }}>

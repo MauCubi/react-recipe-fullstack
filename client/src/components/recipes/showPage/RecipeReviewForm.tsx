@@ -1,4 +1,3 @@
-import { DevTool } from '@hookform/devtools';
 import { Avatar, Box, Button, Divider, IconButton, Rating, TextField, Typography } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
@@ -251,7 +250,6 @@ export const RecipeReviewForm = () => {
                     </Box>
 
                 </Box>
-                <DevTool control={control}/>
             </>
             
         }

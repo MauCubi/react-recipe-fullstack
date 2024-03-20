@@ -10,7 +10,7 @@ interface RecipeRequest extends Request {
     uid: Types.ObjectId
 }
 
-const ITEM_PER_PAGE = 3
+const ITEM_PER_PAGE = 6
 
 export const getRecipe = async (req: RecipeRequest, res: Response) => {
 

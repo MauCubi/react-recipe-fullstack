@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useForm } from 'react-hook-form';
 import { Box, Button, CircularProgress, Divider, Typography } from '@mui/material';
 import { SaveOutlined } from '@mui/icons-material';
-import { DevTool } from '@hookform/devtools';
 import { startSavingUserSettings } from '../../store/user/thunks';
 import { checkAuthToken } from '../../store/auth/thunks';
 import { setUserSettingsStatus } from '../../store/user/userSlice';
@@ -40,7 +39,7 @@ export const UserSettings = () => {
   });    
 
   const uploadClick = useRef<HTMLInputElement | null>(null)
-  const { handleSubmit, register, control, formState } = form
+  const { handleSubmit, register, formState } = form
   const { errors } = formState
   
   const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | undefined>(user?.avatar)
@@ -111,7 +110,7 @@ export const UserSettings = () => {
 
         <Box component='div' sx={{ display:'flex', minHeight:'90vh', backgroundColor:'#e4f0ff66', justifyContent:'center'}}>
 
-          <Box component='div' borderRadius='15px' sx={{ backgroundColor:'white', boxShadow:3, p:3, my:4, width:'70%', flexDirection:'row'}}>
+          <Box component='div' borderRadius='15px' sx={{ backgroundColor:'white', boxShadow:3, p:3, my:4, width:{xs:'90%',sm:'70%'}, flexDirection:'row'}}>
 
             <Typography variant='h5' sx={{ color:'primary.light' }}>Configuracion de usuario</Typography>             
             <Divider sx={{ my:2 }}/>
@@ -177,8 +176,6 @@ export const UserSettings = () => {
               <CircularProgress />
 
             }
-
-          <DevTool control={control}/>
           </Box>
         </Box>
 

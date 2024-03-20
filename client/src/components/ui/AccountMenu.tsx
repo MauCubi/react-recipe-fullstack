@@ -48,8 +48,9 @@ return (
             
         >            
             <Avatar sx={{ width: 27, height: 27, mr: { xs:0,sm:1 } }} src={ user?.avatar }/>   
-            <Typography sx={{ fontFamily:'sans-serif', display:{ xs:'none', sm:'flex' } }}>
-            { user?.name }
+            <Typography sx={{ fontFamily:'sans-serif', fontSize:'14px', display:{ xs:'none', sm:'flex' } }}>
+            {/* { user?.name } */}
+            Mi Cuenta
             </Typography>
             <KeyboardArrowDown sx={{ fontSize:18, ml:1, display:{ xs:'none', sm:'flex' } }}/>
 

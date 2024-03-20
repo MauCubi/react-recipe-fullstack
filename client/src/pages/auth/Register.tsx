@@ -1,6 +1,5 @@
 import { Button, Grid, TextField, Typography, Link, Alert } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { DevTool } from "@hookform/devtools"
 import { Link as RouterLink } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { startRegister } from '../../store/auth/thunks';
@@ -37,7 +36,7 @@ export const Register = () => {
     dispatch(startRegister(data))    
   }
 
-  const { handleSubmit, register, control, formState } = form
+  const { handleSubmit, register, formState } = form
 	const { errors } = formState
 
   return (
@@ -50,7 +49,7 @@ export const Register = () => {
 
             <Grid item xs={ 12 } sx={{ mt: 2}}>
 
-              <TextField label='Nombre de usuario' type="text" placeholder="username" fullWidth
+              <TextField label='Nombre de usuario' type="text" placeholder="username" fullWidth inputProps={{ maxLength: 35 }}
                 {...register('name', {
                   required: {
                     value: true,
@@ -132,7 +131,6 @@ export const Register = () => {
 
           </Grid>
         </form>
-        <DevTool control={control}/>
         
       </Grid>
     </Grid>

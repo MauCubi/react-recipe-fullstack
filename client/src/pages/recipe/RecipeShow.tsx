@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, CircularProgress, Divider, Rating, Typography } from '@mui/material'
+import { Avatar, Box, Button, CircularProgress, Divider, IconButton, Rating, Typography } from '@mui/material'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useEffect } from 'react'
 import { startAddRemoveFavorite, startDeletingRecipe, startLoadingRecipe } from '../../store/recipe/thunks'
@@ -154,14 +154,38 @@ export const RecipeShow = () => {
               {
                 (activeRecipe.user.name === user?.name)?
                   <Box display='flex' component='div' gap={1}>
-                    <Link to={`/recetas/editar/${activeRecipe._id}`}>
-                      <Button startIcon={<Edit />} variant="contained" color="warning" size='small'>
+
+
+                    <Link to={`/recetas/editar/${activeRecipe._id}`} style={{ textTransform:'none', textDecoration:'none' }}>
+                      <Button startIcon={<Edit />} variant="contained" color="warning" size='small' sx={{ display:{xs:'none', sm:'flex'}, textTransform:'none' }}>
                         Editar
                       </Button>
+                      <IconButton 
+                          size='small' 
+                          color='warning' 
+                          sx={{ 
+                              display:{xs:'flex', sm:'none'}                                  
+                          }}
+                      >
+                        <Edit />
+                      </IconButton>
                     </Link>
-                    <Button startIcon={<Delete/>} variant="contained" color="error" size='small' onClick={ onDeleteRecipe }>
+
+                    <IconButton 
+                        size='small'  
+                        color='error'
+                        sx={{ 
+                            display:{xs:'flex', sm:'none'}                                  
+                        }}
+                        onClick={ onDeleteRecipe }
+                    >
+                        <Delete />
+                    </IconButton>
+
+                    <Button startIcon={<Delete/>} variant="contained" color="error" size='small' onClick={ onDeleteRecipe } sx={{ display:{xs:'none', sm:'flex'}, textTransform:'none'  }}>
                       Borrar
                     </Button>
+
                   </Box>
                 :''
               }
@@ -255,12 +279,12 @@ export const RecipeShow = () => {
             <Typography sx={{ fontFamily:'Hedvig Letters Serif', color:'black', fontSize:'1.125rem' }}>{ activeRecipe?.description}</Typography>
 
             <Box className='recipe-uploader-info' component='div' sx={{ display:'flex', flexDirection:'row', mt:2}}>
-                <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem'}}>Receta subida por</Typography>
+                <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem'}}>Subida por</Typography>
 
                 <Link to={`/usuario/${activeRecipe.user._id}/${activeRecipe.user.name.replace(/ /g, '-')}`} style={{ textDecoration:'none'}}>     
-                  <Box component='div' sx={{ display:'flex', flexDirection:'row' }}>
+                  <Box component='div'sx={{ display:'flex', flexDirection:'row', overflow: "hidden"  }}>
                     <Avatar sx={{ width: 20, height: 20, mx: 1 }} src={activeRecipe.user.avatar} />
-                    <Typography sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem', fontWeight:600, color:'black'}}>
+                    <Typography noWrap sx={{ fontFamily:'Hedvig Letters Serif', fontSize:'.875rem', fontWeight:600, color:'black', textOverflow: "ellipsis",width:{xs:'9rem', sm:'auto'} }}>
                       { activeRecipe?.user.name}
                     </Typography>
                   </Box>             

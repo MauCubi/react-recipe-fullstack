@@ -1,6 +1,5 @@
 import { Alert, Button, Grid, Link, TextField, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { DevTool } from "@hookform/devtools"
 import { Link as RouterLink } from 'react-router-dom'
 import { startLogin } from '../../store/auth/thunks'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -39,7 +38,7 @@ export const Login = () => {
   }, [errorMessage])
   
 
-  const { handleSubmit, register, control, formState } = form
+  const { handleSubmit, register, formState } = form
 	const { errors } = formState
 
   return (
@@ -116,7 +115,6 @@ export const Login = () => {
             </Grid>
 
         </form>
-        <DevTool control={control}/>
 
       </Grid>
     </Grid>

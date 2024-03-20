@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress, Divider, FormControl, IconButton, InputA
 import { useEffect, useRef, useState } from 'react';
 import '@fontsource/roboto/400.css';
 import { useForm, useFieldArray } from 'react-hook-form'
-import { DevTool } from '@hookform/devtools';
+// import { DevTool } from '@hookform/devtools';
 import AddIcon from '@mui/icons-material/Add';
 import { RemoveCircleOutline, SaveOutlined } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -131,15 +131,15 @@ export const RecipeForm = ({recipe = null} : {recipe: Recipe | null}) => {
                     
                     <Box component='div' sx={{ display:'flex', flexDirection:'column', width:{ xs:'100%', sm:'50%' }, gap:4, mt:2 }}>
                                                   
-                            <TextField type='text' label='Nombre de la Receta' size='small' required inputProps={{ maxLength:90 }}
+                            <TextField type='text' label='Nombre de la Receta' size='small' required inputProps={{ maxLength:60 }}
                                 {...register('name', {
                                     required: {
                                         value: true,
                                         message: 'Nombre de la receta es obligatorio'
                                     },
                                     maxLength:{
-                                        value: 90,
-                                        message: 'Maximo caracteres 90'
+                                        value: 60,
+                                        message: 'Maximo caracteres 60'
                                     }
                                 })}   
                             /> 
@@ -407,7 +407,7 @@ export const RecipeForm = ({recipe = null} : {recipe: Recipe | null}) => {
             </>
                 :''
         }
-        <DevTool control={control}/>
+        {/* <DevTool control={control}/> */}
         </Box>
   )
 }
