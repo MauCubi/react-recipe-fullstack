@@ -94,8 +94,11 @@ export const RecipeGridWrapper = () => {
       {
         (isLoadingRecipes)
         ?
-        <Box component='div' sx={{ display:'flex', justifyContent:'center', alignContent:'center', width:'100%', mt:'150px' }}>
-          <CircularProgress/>   
+        <Box component='div' sx={{ display:'flex', flexDirection:'column', width:'100%', mt:'150px' }}>
+          <CircularProgress sx={{justifySelf:'center', alignSelf:'center', ml:'50px'}}/> 
+          <Typography variant='h6' sx={{justifySelf:'center', alignSelf:'center', color:'#62bec8ab', mt:'1rem',ml:'50px', textAlign:'center'}}>
+            La primera vez que cargue puede tardar alrededor de 3 mins, debido al hosting gratuito del backend (Afecta tambien al user login/registro)
+          </Typography>  
         </Box>             
         :(recipes?.length === 0)
         ?
