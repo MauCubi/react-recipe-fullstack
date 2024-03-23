@@ -40,7 +40,7 @@ export const SearchBox = () => {
     
     const handleKeyPress = (e:string) => {        
         if(e == 'Enter'){
-            navigate(`./recetas/buscar/${searchValue.replace(/ /g, '-')}`)
+            navigate(`/recetas/buscar/${searchValue.replace(/ /g, '-')}`)
             navigate(0)
             setSearchValue('')
         }        
