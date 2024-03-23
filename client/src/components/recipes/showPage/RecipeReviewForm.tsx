@@ -201,7 +201,7 @@ export const RecipeReviewForm = () => {
                             defaultValue={null}
                             rules={{ required: { value:true, message:'Debe elegir una calificacion de la receta'} }}
                             render={() => <Rating inputMode='numeric' name='rating' sx={{ fontSize:'22px', mr:1}} value={ form.getValues('rating') }
-                                onChange={ (event, newValue) => newValue!==null && form.setValue('rating', newValue) }
+                                onChange={ (_event, newValue) => newValue!==null && form.setValue('rating', newValue) }
                             />}
                         />
                         {errors.rating && <Typography fontSize={12} component='span' color='error'>{errors.rating.message}</Typography>} 

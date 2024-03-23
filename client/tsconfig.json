@@ -11,8 +11,7 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false,
-    "noEmitOnError": false,
+    "noEmit": true,
     "jsx": "react-jsx",
 
     /* Linting */
@@ -22,8 +21,5 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],  
-  "references": [{ "path": "./tsconfig.node.json" }],
-  "exclude": [
-    "**/*.tsx"
-]
+  "references": [{ "path": "./tsconfig.node.json" }],  
 }

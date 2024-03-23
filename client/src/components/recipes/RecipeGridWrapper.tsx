@@ -115,7 +115,7 @@ export const RecipeGridWrapper = () => {
       ?
       <Grid sx={{ mb:2}} mt={4}>
         <Pagination count={Math.ceil(pagination?.pageCount as number)} color="primary" page={page} 
-          onChange={ (event, pageNumber) => {
+          onChange={ (_event, pageNumber) => {
             setPage(pageNumber) 
             window.scrollTo(0,0)}
           }

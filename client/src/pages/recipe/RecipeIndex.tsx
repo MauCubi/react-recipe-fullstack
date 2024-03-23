@@ -1,6 +1,6 @@
 import { Box, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Pagination, Select, Typography } from '@mui/material'
 import {  useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { startLoadingRecipes } from '../../store/recipe/thunks'
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
@@ -25,6 +25,11 @@ export const RecipeIndex = () => {
       setSortOrder('asc')
     }
 
+  }
+  
+  const changePage = (event:ChangeEvent<unknown>, value: number) => {
+    event.preventDefault
+    setPage(value)
   }
 
   useEffect(() => {     
@@ -96,7 +101,7 @@ export const RecipeIndex = () => {
       (pagination?.count!==0)
       ?
       <Grid sx={{ mb:2}} mt={4}>
-        <Pagination count={Math.ceil(pagination?.pageCount as number)} color="primary" page={page} onChange={ (event, pageNumber) => setPage(pageNumber)}/>
+        <Pagination count={Math.ceil(pagination?.pageCount as number)} color="primary" page={page} onChange={ (event, pageNumber) => changePage(event, pageNumber)}/>
       </Grid>
       :''      
     }
