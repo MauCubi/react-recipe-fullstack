@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const field_validators_1 = require("../middlewares/field-validators");
+const jwt_validators_1 = require("../middlewares/jwt-validators");
+const user_1 = require("../controllers/user");
+const router = (0, express_1.Router)();
+router.put('/:id', [field_validators_1.fieldValidator, jwt_validators_1.validateJWT], user_1.updateUser);
+router.get('/:id', user_1.getUser);
+module.exports = router;
