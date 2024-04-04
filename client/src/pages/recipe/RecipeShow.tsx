@@ -262,7 +262,10 @@ export const RecipeShow = () => {
                       if (status === 'authenticated') {
                         dispatch(startAddRemoveFavorite(activeRecipe?._id as string))                           
                       } else {
-                        alert('Tenes que iniciar sesion!')
+                        Swal.fire({
+                          title: "Debes iniciar sesion para agregar favoritos!",
+                          icon:'info'                            
+                        })
                       }
                     }}
                   >

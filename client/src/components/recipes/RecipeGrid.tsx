@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { Favorite, FavoriteBorderOutlined } from '@mui/icons-material';
 import { startAddRemoveFavorite } from '../../store/recipe/thunks';
 import 'animate.css';
+import Swal from 'sweetalert2';
 
 
 export const RecipeGrid = () => {
@@ -62,7 +63,11 @@ export const RecipeGrid = () => {
                         if (status === 'authenticated') {
                           dispatch(startAddRemoveFavorite(recipe._id))                           
                         } else {
-                          alert('Tenes que iniciar sesion!')
+                          // alert('Tenes que iniciar sesion!')
+                          Swal.fire({
+                            title: "Debes iniciar sesion para agregar favoritos!",
+                            icon:'info'                            
+                          })
                         }
                       }}
                     >
