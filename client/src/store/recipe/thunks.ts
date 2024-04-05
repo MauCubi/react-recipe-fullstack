@@ -27,7 +27,7 @@ export const startLoadingRecipes = (sortBy:string, sortOrder:string, category?: 
                     dispatch(onLoadRecipes(data))
                 }
             } else if(search){
-                const { data } = await recipeApi.get(`/recipes/search/${search}?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                    
+                const { data } = await recipeApi.get(`/recipes/search/${search.replace(/-/g, ' ')}?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)                    
                 dispatch(onLoadRecipes(data))
             } else if(userid){
                 const { data } = await recipeApi.get(`/recipes/profile/${userid}?page=${page}&sortBy=${sortBy}&sortOrder=${sortOrder}`)            
