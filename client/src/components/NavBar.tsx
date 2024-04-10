@@ -48,25 +48,20 @@ export const NavBar = () => {
       { props.children }
     </Button>
   )
-
-
   
   const [mobileOpen, setMobileOpen] = useState(false);
 
-
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
-  };
-  
+  };  
 
-  useEffect(() => {
-      
+  useEffect(() => {      
     dispatch(startLoadingCategories())
   }, [dispatch]) 
 
-  return (
-    
+  return (    
     <>
+
       <AppBar position='sticky' sx={{ backgroundColor:'primary' }}>
         <Toolbar sx={{ display:'flex', justifyContent:'space-between' }}>
           <Box display='flex' sx={{ alignItems:'center', pr:{ xs:2,sm:0} }}>
@@ -86,7 +81,7 @@ export const NavBar = () => {
               </Box>
             </Link>
           </Box>
-          
+
           <SearchBox />
 
           {
@@ -107,9 +102,6 @@ export const NavBar = () => {
 
         </Toolbar>
       </AppBar>
-
-
-
 
       {/* SideBar */}
       <Box component='nav' sx={{ width: { sm: 240 }, flexShrink: { sm:0 } }}>
@@ -196,7 +188,6 @@ export const NavBar = () => {
 
       </Box>
 
-    </>
-    
+    </>    
   )
 }

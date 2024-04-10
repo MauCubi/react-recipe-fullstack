@@ -42,7 +42,8 @@ export const UserSettings = () => {
   const { handleSubmit, register, formState } = form
   const { errors } = formState
   
-  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | undefined>(user?.avatar)
+  const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | undefined>(user?.avatar)  
+  const [btnDisabled, setbtnDisabled] = useState<boolean>(true)
 
   const { ref, ...rest } = register('avatar', { 
     required: { value:user?false:true, message:'Imagen necesaria'},              
@@ -65,25 +66,17 @@ export const UserSettings = () => {
             form.setError('avatar',{type:'custom', message:'El tamaño es muy grande'} , {shouldFocus: true})
         } else {
             form.clearErrors('avatar')                     
-        }        
+        } 
+      setbtnDisabled(false)       
     }
   }
 
   useEffect(() => {
 
     form.setValue('avatar', user?.avatar as string)
-    setImagePreview(user?.avatar)
+    setImagePreview(user?.avatar)    
     
   }, [user?.avatar, form])
-
-  // useEffect(() => {
-
-  //   if (userSettingsStatus === 'savingcomplete') {
-  //     dispatch(checkAuthToken)
-  //     console.log('YEAH')
-  //     dispatch(setUserSettingsStatus('idle'))
-  //   }    
-  // }, [userSettingsStatus, dispatch])
 
   useEffect(() => {
     if (userSettingsStatus === 'savingcomplete') {
@@ -101,7 +94,9 @@ export const UserSettings = () => {
 
   const onSubmit = async ( data: SettingsFormData ) => {         
     dispatch(startSavingUserSettings(data, user?.uid as string))
+    console.log(form.getFieldState('avatar'))
     form.reset({}, { keepValues: true })
+    setbtnDisabled(true)
   }  
 
   return (
@@ -160,8 +155,8 @@ export const UserSettings = () => {
                     <Button 
                         startIcon={(userSettingsStatus==='saving')?<CircularProgress size={20} sx={{ color:'#00000042' }}/>:<SaveOutlined />} 
                         variant="contained" 
-                        type='submit' 
-                        disabled={!form.formState.isDirty}
+                        type='submit'
+                        disabled={btnDisabled}
                         sx={{ 
                             mr:4
                         }}
@@ -169,7 +164,7 @@ export const UserSettings = () => {
                       Guardar Cambios                                   
                     </Button>
                     
-                </Box>   
+                </Box>
               </Box>
               
               :
