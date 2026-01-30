@@ -31,7 +31,7 @@ export const Socials = () => {
       color='white'
       
     >
-      Copyright &copy; 2023 Cubilla Mauro
+      Copyright &copy; 2024 Cubilla Mauro
     </Typography>
 
     <Stack 
